@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">todi</string>
+    <string name="lbl_app_name">Todi</string>
+    <string name="cd_settings">Settings</string>
+    <string name="lbl_home">Home</string>
+    <string name="lbl_view">View</string>
+    <string name="lbl_edit">Edit</string>
+    <string name="lbl_settings">Settings</string>
 </resources>
