@@ -36,6 +36,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import logcat.logcat
 import org.skyfaced.todi.R
+import org.skyfaced.todi.database.TodiDatabaseImpl
 import org.skyfaced.todi.settings.TodiLocale
 import org.skyfaced.todi.settings.TodiSettingsImpl
 import org.skyfaced.todi.settings.TodiTheme
@@ -45,6 +46,7 @@ import org.skyfaced.todi.ui.screen.home.HomeScreen
 import org.skyfaced.todi.ui.screen.settings.SettingsScreen
 import org.skyfaced.todi.ui.screen.settings.SettingsViewModel
 import org.skyfaced.todi.ui.theme.TodiTheme
+import org.skyfaced.todi.util.LocalTodiDatabase
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiSettings
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
@@ -55,7 +57,9 @@ import java.util.*
 fun TodiApp() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val settings = remember { TodiSettingsImpl(context) }
+
+    val settings = remember { TodiSettingsImpl(context.applicationContext) }
+    val database = remember { TodiDatabaseImpl(context.applicationContext).database }
 
     val systemUiController = rememberSystemUiController()
     val navHostController = rememberNavController()
@@ -73,7 +77,8 @@ fun TodiApp() {
 
     CompositionLocalProvider(
         LocalTodiNavigation provides navHostController,
-        LocalTodiSettings provides settings
+        LocalTodiSettings provides settings,
+        LocalTodiDatabase provides database
     ) {
         val locale = settings.locale.observe.collectAsStateWithLifecycle(TodiLocale.English).value
         setLocale(locale)

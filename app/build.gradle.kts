@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.devtools.ksp")
     kotlin("android")
 }
 
@@ -12,8 +13,13 @@ android {
         targetSdk = 32
         versionCode = 1
         versionName = "1.0.0"
+
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -55,6 +61,14 @@ android {
     packagingOptions {
         resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
     }
+
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/${name}/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -75,6 +89,11 @@ dependencies {
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.5.0")
+
+    // Database
+    implementation("androidx.room:room-runtime:2.4.2")
+    implementation("androidx.room:room-ktx:2.4.2")
+    ksp("androidx.room:room-compiler:2.4.2")
 
     // Util
     implementation("com.squareup.logcat:logcat:0.1")
