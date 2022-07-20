@@ -51,6 +51,7 @@ import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiSettings
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
 import java.util.*
+import org.skyfaced.todi.ui.util.ExtendedFloatingActionButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -166,7 +167,8 @@ private fun TodiFloatingActionButton(
                 )
             },
             text = { Text(stringResource(R.string.lbl_add_task)) },
-            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
+            enabled = enabled
         )
     }
 }
