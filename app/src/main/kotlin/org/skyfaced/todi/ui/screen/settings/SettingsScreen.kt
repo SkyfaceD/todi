@@ -38,7 +38,6 @@ import org.skyfaced.todi.ui.util.ConfirmationDialog
 import org.skyfaced.todi.ui.util.VerticalDivider
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
 
-
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel(),
@@ -90,9 +89,7 @@ private fun SettingsScreen(
     )
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .animateContentSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         val (themeSummary, themeIcon) = when (state.theme) {
             TodiTheme.System -> R.string.lbl_system_theme to R.drawable.ic_theme_system
