@@ -4,8 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import logcat.logcat
-import org.skyfaced.todi.ui.model.TaskShort
+import org.skyfaced.todi.ui.model.task.TaskShort
 
 class HomeViewModel : ViewModel() {
     var state by mutableStateOf(HomeUiState())

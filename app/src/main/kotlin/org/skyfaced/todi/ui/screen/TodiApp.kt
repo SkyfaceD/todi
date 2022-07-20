@@ -3,16 +3,43 @@ package org.skyfaced.todi.ui.screen
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
@@ -40,18 +67,21 @@ import org.skyfaced.todi.database.TodiDatabaseImpl
 import org.skyfaced.todi.settings.TodiLocale
 import org.skyfaced.todi.settings.TodiSettingsImpl
 import org.skyfaced.todi.settings.TodiTheme
+import org.skyfaced.todi.ui.model.task.TaskEntityMapper
+import org.skyfaced.todi.ui.screen.details.DetailsRepositoryImpl
 import org.skyfaced.todi.ui.screen.details.DetailsScreen
+import org.skyfaced.todi.ui.screen.details.DetailsViewModel
 import org.skyfaced.todi.ui.screen.details.Mode
 import org.skyfaced.todi.ui.screen.home.HomeScreen
 import org.skyfaced.todi.ui.screen.settings.SettingsScreen
 import org.skyfaced.todi.ui.screen.settings.SettingsViewModel
 import org.skyfaced.todi.ui.theme.TodiTheme
+import org.skyfaced.todi.ui.util.ExtendedFloatingActionButton
 import org.skyfaced.todi.util.LocalTodiDatabase
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiSettings
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
 import java.util.*
-import org.skyfaced.todi.ui.util.ExtendedFloatingActionButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -131,14 +161,12 @@ fun TodiApp() {
                     TodiFloatingActionButton(
                         navBackStackEntry = navBackStackEntry,
                         onClick = {
-                            navHostController.navigate(
-                                Screens.Details.argRoute(UUID.randomUUID(), Mode.Create)
-                            )
+                            navHostController.navigate(Screens.Details.argRoute(Mode.Create))
                         }
                     )
                 },
                 content = { innerPadding ->
-                    TodiNavHost(modifier = Modifier.padding(innerPadding))
+                    TodiNavHost(modifier = Modifier.padding(innerPadding).imePadding())
                 }
             )
         }
@@ -295,16 +323,28 @@ private fun TodiNavHost(
         composable(
             route = Screens.Details.route,
             arguments = listOf(
-                navArgument("uuid") { type = NavType.StringType },
                 navArgument("mode") { type = NavType.StringType },
+                navArgument("id") { type = NavType.LongType; defaultValue = -1 },
             )
         ) { navBackStackEntry ->
-            val uuid = UUID.fromString(navBackStackEntry.arguments?.getString("uuid").orEmpty())
             val mode = Mode.valueOf(navBackStackEntry.arguments?.getString("mode").orEmpty())
+            val id = navBackStackEntry.arguments?.getLong("id") ?: -1
+
+            val database = LocalTodiDatabase.current
+            val viewModel = viewModel<DetailsViewModel>(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        val repository = DetailsRepositoryImpl(database.taskDao, TaskEntityMapper())
+                        return DetailsViewModel(mode, id, repository) as T
+                    }
+                }
+            )
 
             DetailsScreen(
-                uuid = uuid,
                 mode = mode,
+                id = id,
+                viewModel = viewModel
             )
         }
 

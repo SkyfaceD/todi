@@ -8,19 +8,24 @@
     <string name="cd_settings">Go to settings</string>
 
     <string name="lbl_about_app">About</string>
+    <string name="lbl_add">Add</string>
     <string name="lbl_add_task">Add task</string>
     <string name="lbl_amoled_support">AMOLED support</string>
     <string name="lbl_amoled_support_summary">Uses less power on AMOLED screens</string>
+    <string name="lbl_app_name" translatable="false">Todi</string>
     <string name="lbl_cancel">Cancel</string>
     <string name="lbl_creation">Creation</string>
+    <string name="lbl_description">Description</string>
     <string name="lbl_dynamic_theme">Dynamic theme</string>
     <string name="lbl_dynamic_theme_summary">Applies a theme created on the color scheme of your wallpaper</string>
     <string name="lbl_editing">Edit</string>
+    <string name="lbl_external_links">External links</string>
     <string name="lbl_home">Home</string>
     <string name="lbl_language">Language</string>
     <string name="lbl_language_english">English</string>
+    <string name="lbl_language_english_native" translatable="false">English</string>
     <string name="lbl_language_russian">Russian</string>
-    <string name="lbl_external_links">External links</string>
+    <string name="lbl_language_russian_native" translatable="false">Русский язык</string>
     <string name="lbl_ok">OK</string>
     <string name="lbl_select_language">Select language</string>
     <string name="lbl_select_theme">Select theme</string>
@@ -29,13 +34,10 @@
     <string name="lbl_theme">Theme</string>
     <string name="lbl_theme_dark">Dark</string>
     <string name="lbl_theme_light">Light</string>
+    <string name="lbl_title">Title</string>
     <string name="lbl_view">View</string>
 
     <string name="msg_select_one_item">Please, select at least one item</string>
 
     <string name="placeholder_app_version">Version %s</string>
-
-    <string name="lbl_app_name" translatable="false">Todi</string>
-    <string name="lbl_language_english_native" translatable="false">English</string>
-    <string name="lbl_language_russian_native" translatable="false">Русский язык</string>
 </resources>

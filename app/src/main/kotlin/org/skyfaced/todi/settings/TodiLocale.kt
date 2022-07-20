@@ -1,6 +1,6 @@
 package org.skyfaced.todi.settings
 
-import org.skyfaced.todi.exception.EnumInferenceException
+import org.skyfaced.todi.util.exception.EnumInferenceException
 
 /**
  * @param tag contains string representation of ISO 639-1 code in lower case
