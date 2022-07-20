@@ -3,12 +3,7 @@ package org.skyfaced.todi.settings
 import android.content.Context
 import android.os.Build
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -24,6 +19,7 @@ class TodiSettingsImpl(
 
         private val Theme = stringPreferencesKey("theme")
         private val DynamicColor = booleanPreferencesKey("dynamic_color")
+        private val AMOLED = booleanPreferencesKey("amoled")
         private val Locale = intPreferencesKey("locale")
     }
 
@@ -47,9 +43,7 @@ class TodiSettingsImpl(
         override val observe: Flow<Boolean>
             get() = context.store.data
                 .catchIO()
-                .map { preferences ->
-                    preferences[DynamicColor] ?: false
-                }
+                .map { preferences -> preferences[DynamicColor] ?: true }
 
         override suspend fun update(newState: Boolean) {
             super.update(newState)
@@ -59,6 +53,21 @@ class TodiSettingsImpl(
         }
     }
 
+    override val amoled: Settings<Boolean> = object : Settings<Boolean> {
+        override val observe: Flow<Boolean>
+            get() = context.store.data
+                .catchIO()
+                .map { preferences -> preferences[AMOLED] ?: true }
+
+        override suspend fun update(newState: Boolean) {
+            super.update(newState)
+            context.store.edit { preferences ->
+                preferences[AMOLED] = newState
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION")
     override val locale: Settings<TodiLocale> = object : Settings<TodiLocale> {
         override val observe: Flow<TodiLocale>
             get() = context.store.data

@@ -1,8 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
-    <string name="lbl_app_name">Todi</string>
-    <string name="cd_settings">Settings</string>
+    <string name="cd_4pda">Go to 4PDA page</string>
+    <string name="cd_add_task">Go to task creation</string>
+    <string name="cd_back">Go back</string>
+    <string name="cd_github">Go to Github page</string>
+    <string name="cd_google_play">Go to Google Play page</string>
+    <string name="cd_settings">Go to settings</string>
+
+    <string name="lbl_about_app">About</string>
+    <string name="lbl_add_task">Add task</string>
+    <string name="lbl_amoled_support">AMOLED support</string>
+    <string name="lbl_amoled_support_summary">Uses less power on AMOLED screens</string>
+    <string name="lbl_cancel">Cancel</string>
+    <string name="lbl_creation">Creation</string>
+    <string name="lbl_dynamic_theme">Dynamic theme</string>
+    <string name="lbl_dynamic_theme_summary">Applies a theme created on the color scheme of your wallpaper</string>
+    <string name="lbl_editing">Edit</string>
     <string name="lbl_home">Home</string>
-    <string name="lbl_view">View</string>
-    <string name="lbl_edit">Edit</string>
+    <string name="lbl_language">Language</string>
+    <string name="lbl_language_english">English</string>
+    <string name="lbl_language_russian">Russian</string>
+    <string name="lbl_external_links">External links</string>
+    <string name="lbl_ok">OK</string>
+    <string name="lbl_select_language">Select language</string>
+    <string name="lbl_select_theme">Select theme</string>
     <string name="lbl_settings">Settings</string>
+    <string name="lbl_system_theme">Follow system</string>
+    <string name="lbl_theme">Theme</string>
+    <string name="lbl_theme_dark">Dark</string>
+    <string name="lbl_theme_light">Light</string>
+    <string name="lbl_view">View</string>
+
+    <string name="msg_select_one_item">Please, select at least one item</string>
+
+    <string name="placeholder_app_version">Version %s</string>
+
+    <string name="lbl_app_name" translatable="false">Todi</string>
+    <string name="lbl_language_english_native" translatable="false">English</string>
+    <string name="lbl_language_russian_native" translatable="false">Русский язык</string>
 </resources>

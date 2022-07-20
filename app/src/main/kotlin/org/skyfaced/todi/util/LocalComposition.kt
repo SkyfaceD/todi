@@ -1,4 +1,4 @@
-package org.skyfaced.todi.ui.util
+package org.skyfaced.todi.util
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController

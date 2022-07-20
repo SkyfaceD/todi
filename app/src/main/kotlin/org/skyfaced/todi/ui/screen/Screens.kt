@@ -1,4 +1,4 @@
-package org.skyfaced.todi.ui.screen.navigation
+package org.skyfaced.todi.ui.screen
 
 import org.skyfaced.todi.ui.screen.details.Mode
 import java.util.*
