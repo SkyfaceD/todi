@@ -18,33 +18,21 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.skyfaced.todi.R
-import org.skyfaced.todi.ui.screen.Screens
 import org.skyfaced.todi.ui.util.TodiButton
 import org.skyfaced.todi.ui.util.TodiTextField
 import org.skyfaced.todi.util.LocalTodiNavigation
 
 @Composable
 fun DetailsScreen(
-    mode: Mode,
-    id: Long = -1,
     viewModel: DetailsViewModel = viewModel(),
 ) {
     val navHostController = LocalTodiNavigation.current
 
     DetailsScreen(
-        mode = mode,
         state = viewModel.state,
         onTitleChange = viewModel::updateTitle,
         onDescriptionChange = viewModel::updateDescription,
-        onButtonClick = {
-            if (mode == Mode.View) {
-                navHostController.navigate(Screens.Details.argRoute(Mode.Edit, id)) {
-                    popUpTo(Screens.Details.route) {
-                        inclusive = true
-                    }
-                }
-            } else viewModel.handleButton()
-        },
+        onButtonClick = viewModel::upsert,
         onMessageShown = viewModel::clearMessage,
         navigateUp = navHostController::navigateUp
     )
@@ -52,7 +40,6 @@ fun DetailsScreen(
 
 @Composable
 private fun DetailsScreen(
-    mode: Mode,
     state: DetailsUiState,
     onTitleChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -106,16 +93,17 @@ private fun DetailsScreen(
                 label = { Text(stringResource(R.string.lbl_description)) },
             )
 
-            val text = when (mode) {
-                Mode.View -> R.string.lbl_edit
-                Mode.Edit -> R.string.lbl_save
-                Mode.Create -> R.string.lbl_add
+            state.mode?.let {
+                val text = when (state.mode) {
+                    Mode.Edit -> R.string.lbl_save
+                    Mode.Create -> R.string.lbl_add
+                }
+                TodiButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(text),
+                    onClick = onButtonClick
+                )
             }
-            TodiButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(text),
-                onClick = onButtonClick
-            )
         }
     }
 }

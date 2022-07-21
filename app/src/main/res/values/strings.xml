@@ -14,14 +14,13 @@
     <string name="lbl_amoled_support">AMOLED support</string>
     <string name="lbl_amoled_support_summary">Uses less power on AMOLED screens</string>
     <string name="lbl_cancel">Cancel</string>
-    <string name="lbl_creation">Creation</string>
+    <string name="lbl_creating">Creating</string>
     <string name="lbl_description">Description</string>
     <string name="lbl_dynamic_theme">Dynamic theme</string>
     <string name="lbl_dynamic_theme_summary">Applies a theme created on the color scheme of your wallpaper</string>
     <string name="lbl_edit">Edit</string>
     <string name="lbl_editing">Editing</string>
     <string name="lbl_external_links">External links</string>
-    <string name="lbl_home">Home</string>
     <string name="lbl_language">Language</string>
     <string name="lbl_language_english">English</string>
     <string name="lbl_language_russian">Russian</string>
@@ -36,7 +35,6 @@
     <string name="lbl_theme_light">Light</string>
     <string name="lbl_title">Title</string>
     <string name="lbl_try_again">Try again</string>
-    <string name="lbl_view">View</string>
 
     <string name="msg_flow_exception">An error occurred while retrieving data</string>
     <string name="msg_no_notes">It looks like you don\'t have any notes</string>

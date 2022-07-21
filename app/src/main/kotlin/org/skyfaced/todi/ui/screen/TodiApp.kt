@@ -173,7 +173,8 @@ private fun TodiFloatingActionButton(
             },
             text = { Text(stringResource(R.string.lbl_add_note)) },
             elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
-            enabled = enabled
+            enabled = enabled,
+            shape = MaterialTheme.shapes.extraLarge
         )
     }
 }
@@ -236,16 +237,14 @@ private fun TodiTopBar(
                     }
                 ) { targetValue ->
                     val title = when (targetValue?.destination?.route) {
-                        Screens.Home.route -> stringResource(R.string.lbl_home)
+                        Screens.Home.route -> stringResource(R.string.lbl_app_name).uppercase()
                         Screens.Details.route -> {
-                            val mode = Mode.valueOf(
-                                targetValue.arguments?.getString("mode") ?: Mode.View.name
-                            )
+                            val mode =
+                                Mode.valueOf(targetValue.arguments?.getString("mode").orEmpty())
                             stringResource(
                                 when (mode) {
-                                    Mode.View -> R.string.lbl_view
                                     Mode.Edit -> R.string.lbl_editing
-                                    Mode.Create -> R.string.lbl_creation
+                                    Mode.Create -> R.string.lbl_creating
                                 }
                             )
                         }
@@ -320,9 +319,6 @@ private fun TodiNavHost(
                 navArgument("id") { type = NavType.LongType; defaultValue = 0L },
             )
         ) { navBackStackEntry ->
-            val mode = Mode.valueOf(navBackStackEntry.arguments?.getString("mode").orEmpty())
-            val id = navBackStackEntry.arguments?.getLong("id") ?: 0L
-
             val viewModel = viewModel<DetailsViewModel>(
                 factory = object : AbstractSavedStateViewModelFactory(navBackStackEntry,
                     navBackStackEntry.arguments) {
@@ -342,11 +338,7 @@ private fun TodiNavHost(
                 }
             )
 
-            DetailsScreen(
-                mode = mode,
-                id = id,
-                viewModel = viewModel
-            )
+            DetailsScreen(viewModel = viewModel)
         }
 
         composable(Screens.Settings.route) {

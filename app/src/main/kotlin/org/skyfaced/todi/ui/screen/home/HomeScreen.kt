@@ -36,7 +36,7 @@ fun HomeScreen(
     HomeScreen(
         state = viewModel.state,
         onItemClick = { note ->
-            navHostController.navigate(Screens.Details.argRoute(Mode.View, note.id))
+            navHostController.navigate(Screens.Details.argRoute(Mode.Edit, note.id))
         },
         onDeleteItemClick = viewModel::deleteNote,
         onRefresh = viewModel::refresh
@@ -162,7 +162,7 @@ private fun Item(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 16.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

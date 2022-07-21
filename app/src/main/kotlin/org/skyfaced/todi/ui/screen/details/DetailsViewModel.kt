@@ -22,6 +22,10 @@ class DetailsViewModel(
     var state by mutableStateOf(DetailsUiState())
         private set
 
+    init {
+        state = state.copy(mode = mode, id = id)
+    }
+
     fun clearMessage(id: Long) {
         viewModelScope.launch { uiMessageManager.clearMessage(id) }
     }
@@ -34,11 +38,7 @@ class DetailsViewModel(
         state = state.copy(description = description)
     }
 
-    fun handleButton() {
-        if (mode != Mode.View) upsert()
-    }
-
-    private fun upsert() {
+    fun upsert() {
         viewModelScope.launch {
             state = state.copy(isUpserting = true)
             detailsRepository.upsertNote(id, state.title, state.description).consume(
@@ -50,6 +50,8 @@ class DetailsViewModel(
 }
 
 data class DetailsUiState(
+    val mode: Mode? = null,
+    val id: Long = 0,
     val title: String = "",
     val description: String = "",
     val uiMessage: UiMessage? = null,
