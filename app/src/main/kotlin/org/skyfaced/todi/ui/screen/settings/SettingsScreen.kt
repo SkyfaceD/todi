@@ -5,24 +5,51 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.*
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.booleanResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +64,7 @@ import org.skyfaced.todi.ui.util.ConfirmationData
 import org.skyfaced.todi.ui.util.ConfirmationDialog
 import org.skyfaced.todi.ui.util.VerticalDivider
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
+import kotlin.math.roundToInt
 
 @Composable
 fun SettingsScreen(
@@ -53,10 +81,11 @@ fun SettingsScreen(
             onDynamicColorChange = viewModel::updateDynamicColor,
             onAmoledChange = viewModel::updateAmoled,
             onLocaleChange = viewModel::updateLocale,
+            onGridCellsChange = viewModel::updateGridCells,
             onExternalLinkClick = {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
                 startActivity(context, intent, null)
-            }
+            },
         )
     }
 }
@@ -69,27 +98,33 @@ private fun SettingsScreen(
     onDynamicColorChange: (Boolean) -> Unit,
     onAmoledChange: (Boolean) -> Unit,
     onLocaleChange: (TodiLocale) -> Unit,
+    onGridCellsChange: (Int) -> Unit,
     onExternalLinkClick: (String) -> Unit,
 ) {
     val themeDialog = remember { mutableStateOf(false) }
     val languageDialog = remember { mutableStateOf(false) }
+    val viewDialog = remember { mutableStateOf(false) }
     val aboutDialog = remember { mutableStateOf(false) }
 
     Dialogs(
         state = state,
         themeDialog = themeDialog,
         languageDialog = languageDialog,
+        viewDialog = viewDialog,
         aboutDialog = aboutDialog,
         onThemeChange = {
             onThemeChange(it)
             if (it == TodiTheme.Light) onAmoledChange(false)
         },
         onLocaleChange = onLocaleChange,
+        onViewChange = onGridCellsChange,
         onExternalLinkClick = onExternalLinkClick
     )
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
     ) {
         val (themeSummary, themeIcon) = when (state.theme) {
             TodiTheme.System -> R.string.lbl_system_theme to R.drawable.ic_theme_system
@@ -139,12 +174,83 @@ private fun SettingsScreen(
             onClick = { languageDialog.value = true },
         )
 
+        val (viewTypeSummary, viewIcon) = if (state.gridCells > 1) R.string.lbl_view_grid to R.drawable.ic_view_grid
+        else R.string.lbl_view_linear to R.drawable.ic_view_linear
+        SettingsButton(
+            title = stringResource(R.string.lbl_view_type),
+            summary = stringResource(viewTypeSummary),
+            icon = painterResource(viewIcon),
+            onClick = { viewDialog.value = true }
+        )
+
+        AnimatedVisibility(
+            visible = state.gridCells > 1 && booleanResource(R.bool.isTablet),
+            enter = fadeIn() + scaleIn(),
+            exit = fadeOut() + scaleOut()
+        ) {
+            SettingsSlider(
+                title = stringResource(R.string.lbl_column_number),
+                summary = state.gridCells.toString(),
+                icon = painterResource(R.drawable.ic_column),
+                value = state.gridCells.toFloat(),
+                onValueChange = { onGridCellsChange(it.roundToInt()) },
+                valueRange = 2f..5f,
+                steps = 2,
+                enabled = state.gridCells > 1,
+            )
+        }
+
         SettingsButton(
             title = stringResource(R.string.lbl_about_app),
             summary = null,
             icon = painterResource(R.drawable.ic_info),
             onClick = { aboutDialog.value = true },
         )
+    }
+}
+
+@Composable
+private fun SettingsSlider(
+    title: String,
+    summary: String,
+    icon: Painter,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int = 0,
+    enabled: Boolean = true,
+) {
+    TextButton(
+        onClick = {},
+        shape = RectangleShape,
+        enabled = enabled,
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = icon,
+                contentDescription = null,
+            )
+            Spacer(Modifier.width(24.dp))
+            Column {
+                Text(title)
+                Text(text = summary, style = MaterialTheme.typography.labelMedium)
+            }
+            Spacer(Modifier.width(16.dp))
+            Slider(
+                value = value,
+                onValueChange = onValueChange,
+                valueRange = valueRange,
+                steps = steps,
+                enabled = enabled,
+            )
+        }
     }
 }
 
@@ -204,7 +310,6 @@ private fun SettingsButton(
     icon: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    asImage: Boolean = false,
 ) = TextButton(
     onClick = onClick,
     shape = RectangleShape,
@@ -216,19 +321,11 @@ private fun SettingsButton(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (asImage) {
-            Image(
-                modifier = Modifier.size(24.dp),
-                painter = icon,
-                contentDescription = null,
-            )
-        } else {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = icon,
-                contentDescription = null,
-            )
-        }
+        Icon(
+            modifier = Modifier.size(24.dp),
+            painter = icon,
+            contentDescription = null,
+        )
         Spacer(Modifier.width(24.dp))
         Column {
             Text(
@@ -248,9 +345,11 @@ private fun Dialogs(
     state: SettingsUiState,
     themeDialog: MutableState<Boolean>,
     languageDialog: MutableState<Boolean>,
+    viewDialog: MutableState<Boolean>,
     aboutDialog: MutableState<Boolean>,
     onThemeChange: (TodiTheme) -> Unit,
     onLocaleChange: (TodiLocale) -> Unit,
+    onViewChange: (Int) -> Unit,
     onExternalLinkClick: (String) -> Unit,
 ) {
     if (themeDialog.value) {
@@ -284,6 +383,22 @@ private fun Dialogs(
             onConfirm = { pos, _ ->
                 languageDialog.value = false
                 onLocaleChange(TodiLocale.from(pos))
+            }
+        )
+    }
+
+    if (viewDialog.value) {
+        ConfirmationDialog(
+            title = stringResource(R.string.lbl_view_select_list_type),
+            items = listOf(
+                ConfirmationData(stringResource(R.string.lbl_view_linear)),
+                ConfirmationData(stringResource(R.string.lbl_view_grid))
+            ),
+            defaultSelectedPosition = if (state.gridCells > 1) 1 else 0,
+            onDismissRequest = { viewDialog.value = false },
+            onConfirm = { pos, _ ->
+                viewDialog.value = false
+                onViewChange(pos.inc())
             }
         )
     }
@@ -342,6 +457,13 @@ private fun Dialogs(
         )
     }
 }
+
+data class ToggleButtonData(
+    @DrawableRes
+    val icon: Int,
+    @StringRes
+    val text: Int
+)
 
 data class ExternalLinkData(
     @DrawableRes

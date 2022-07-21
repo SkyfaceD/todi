@@ -14,6 +14,7 @@
     <string name="lbl_amoled_support">Поддержка AMOLED</string>
     <string name="lbl_amoled_support_summary">Потребляет меньше заряда батареи на AMOLED экранах</string>
     <string name="lbl_cancel">Отмена</string>
+    <string name="lbl_column_number">Количество колонок</string>
     <string name="lbl_creating">Создание</string>
     <string name="lbl_description">Описание</string>
     <string name="lbl_dynamic_theme">Динамическая тема</string>
@@ -35,6 +36,10 @@
     <string name="lbl_theme_light">Светлая</string>
     <string name="lbl_title">Заголовок</string>
     <string name="lbl_try_again">Попробовать снова</string>
+    <string name="lbl_view_grid">Сеткой</string>
+    <string name="lbl_view_linear">Построчно</string>
+    <string name="lbl_view_select_list_type">Выберите тип списка</string>
+    <string name="lbl_view_type">Тип списка</string>
 
     <string name="msg_flow_exception">Произошла ошибка при попытке получить данные</string>
     <string name="msg_no_notes">Похоже, у Вас нет заметок</string>

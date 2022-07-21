@@ -16,9 +16,10 @@ class SettingsViewModel(
         settings.theme.observe,
         settings.dynamicColor.observe,
         settings.amoled.observe,
-        settings.locale.observe
-    ) { theme, dynamicColor, amoled, locale ->
-        SettingsUiState(theme, dynamicColor, amoled, locale)
+        settings.locale.observe,
+        settings.gridCells.observe
+    ) { theme, dynamicColor, amoled, locale, gridCells ->
+        SettingsUiState(theme, dynamicColor, amoled, locale, gridCells)
     }
 
     fun updateTheme(theme: TodiTheme) {
@@ -36,12 +37,17 @@ class SettingsViewModel(
     fun updateLocale(locale: TodiLocale) {
         viewModelScope.launch { settings.locale(locale) }
     }
+
+    fun updateGridCells(gridCells: Int) {
+        viewModelScope.launch { settings.gridCells(gridCells) }
+    }
 }
 
 @Immutable
 data class SettingsUiState(
-    val theme: TodiTheme = TodiTheme.System,
-    val dynamicColor: Boolean = true,
-    val amoled: Boolean = false,
-    val locale: TodiLocale = TodiLocale.English,
+    val theme: TodiTheme,
+    val dynamicColor: Boolean,
+    val amoled: Boolean,
+    val locale: TodiLocale,
+    val gridCells: Int
 )

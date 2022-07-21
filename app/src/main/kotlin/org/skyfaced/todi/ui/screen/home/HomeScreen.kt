@@ -3,11 +3,31 @@ package org.skyfaced.todi.ui.screen.home
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +42,6 @@ import org.skyfaced.todi.ui.model.note.Note
 import org.skyfaced.todi.ui.screen.Screens
 import org.skyfaced.todi.ui.screen.details.Mode
 import org.skyfaced.todi.ui.util.ContentPadding
-import org.skyfaced.todi.ui.util.LazyStaggeredGrid
 import org.skyfaced.todi.ui.util.ScreenState
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.exception.FlowException
@@ -101,45 +120,27 @@ private fun HomeScreen(
             }
             ScreenState.Success -> {
                 state.notes?.let { notes ->
-                    if (state.gridCells > 1) {
-                        LazyStaggeredGrid(
-                            columnCount = 2,
-                            contentPadding = ContentPadding(16.dp),
-                        ) {
-                            notes.forEach { item ->
-                                item {
-                                    Column {
-                                        Item(
-                                            item = item,
-                                            descriptionMaxLines = state.descriptionMaxLines,
-                                            onItemClick = { onItemClick(item) },
-                                            onDeleteItemClick = { onDeleteItemClick(item) }
-                                        )
-                                        Spacer(Modifier.height(16.dp))
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            items(items = notes, key = { it.id }) { item ->
-                                Item(
-                                    modifier = Modifier.animateItemPlacement(),
-                                    item = item,
-                                    descriptionMaxLines = state.descriptionMaxLines,
-                                    onItemClick = { onItemClick(item) },
-                                    onDeleteItemClick = { onDeleteItemClick(item) }
-                                )
-                            }
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(state.gridCells),
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = ListPadding.toPaddingValues(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(items = notes, key = { it.id }) { item ->
+                            Item(
+                                modifier = Modifier.animateItemPlacement(),
+                                item = item,
+                                descriptionMaxLines = state.descriptionMaxLines,
+                                onItemClick = { onItemClick(item) },
+                                onDeleteItemClick = { onDeleteItemClick(item) }
+                            )
                         }
                     }
                 }
             }
-            ScreenState.Unknown -> { /* Ignore */
+            ScreenState.Unknown -> {
+                /* Ignore */
             }
         }
     }
@@ -203,3 +204,5 @@ private fun Item(
         }
     }
 }
+
+private val ListPadding = ContentPadding(16.dp).copy(bottom = 72.dp)

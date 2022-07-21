@@ -57,14 +57,16 @@ class HomeViewModel(
     }
 
     private fun applySettings() {
-        combine(
-            settings.gridCells.observe,
-            settings.descriptionMaxLines.observe
-        ) { gridCells, descriptionMaxLines ->
-            state = state.copy(
-                gridCells = gridCells,
-                descriptionMaxLines = descriptionMaxLines
-            )
+        viewModelScope.launch {
+            combine(
+                settings.gridCells.observe,
+                settings.descriptionMaxLines.observe
+            ) { gridCells, descriptionMaxLines ->
+                state = state.copy(
+                    gridCells = gridCells,
+                    descriptionMaxLines = descriptionMaxLines
+                )
+            }.collect { }
         }
     }
 
