@@ -29,6 +29,7 @@ fun DetailsScreen(
     val navHostController = LocalTodiNavigation.current
 
     DetailsScreen(
+        mode = viewModel.mode,
         state = viewModel.state,
         onTitleChange = viewModel::updateTitle,
         onDescriptionChange = viewModel::updateDescription,
@@ -40,6 +41,7 @@ fun DetailsScreen(
 
 @Composable
 private fun DetailsScreen(
+    mode: Mode,
     state: DetailsUiState,
     onTitleChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -93,17 +95,15 @@ private fun DetailsScreen(
                 label = { Text(stringResource(R.string.lbl_description)) },
             )
 
-            state.mode?.let {
-                val text = when (state.mode) {
-                    Mode.Edit -> R.string.lbl_save
-                    Mode.Create -> R.string.lbl_add
-                }
-                TodiButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(text),
-                    onClick = onButtonClick
-                )
+            val text = when (mode) {
+                Mode.Edit -> R.string.lbl_save
+                Mode.Create -> R.string.lbl_add
             }
+            TodiButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(text),
+                onClick = onButtonClick
+            )
         }
     }
 }

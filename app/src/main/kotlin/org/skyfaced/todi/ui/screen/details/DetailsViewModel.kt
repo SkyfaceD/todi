@@ -16,14 +16,14 @@ class DetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val uiMessageManager: UiMessageManager = UiMessageManager(),
 ) : ViewModel() {
-    private val mode: Mode = Mode.valueOf(savedStateHandle.get<String>("mode").orEmpty())
-    private val id: Long = savedStateHandle.get<Long>("id") ?: 0L
+    val mode: Mode = Mode.valueOf(savedStateHandle.get<String>("mode").orEmpty())
+    val id: Long = savedStateHandle.get<Long>("id") ?: 0L
 
     var state by mutableStateOf(DetailsUiState())
         private set
 
     init {
-        state = state.copy(mode = mode, id = id)
+        if (id != 0L) fetchNote()
     }
 
     fun clearMessage(id: Long) {
@@ -47,11 +47,18 @@ class DetailsViewModel(
             )
         }
     }
+
+    private fun fetchNote() {
+        viewModelScope.launch {
+            detailsRepository.fetchNoteById(id).consume(
+                onSuccess = { state = state.copy(title = it.title, description = it.description) },
+                onFailure = { state = state.copy(uiMessage = UiMessage(it)) }
+            )
+        }
+    }
 }
 
 data class DetailsUiState(
-    val mode: Mode? = null,
-    val id: Long = 0,
     val title: String = "",
     val description: String = "",
     val uiMessage: UiMessage? = null,
