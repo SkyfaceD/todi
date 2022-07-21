@@ -3,6 +3,7 @@
     <string name="cd_4pda">Go to 4PDA page</string>
     <string name="cd_add_note">Go to note creation</string>
     <string name="cd_back">Go back</string>
+    <string name="cd_delete">Delete</string>
     <string name="cd_github">Go to Github page</string>
     <string name="cd_google_play">Go to Google Play page</string>
     <string name="cd_settings">Go to settings</string>
@@ -34,11 +35,16 @@
     <string name="lbl_theme_dark">Dark</string>
     <string name="lbl_theme_light">Light</string>
     <string name="lbl_title">Title</string>
+    <string name="lbl_try_again">Try again</string>
     <string name="lbl_view">View</string>
 
-    <string name="msg_select_one_item">Please, select at least one item</string>
+    <string name="msg_flow_exception">An error occurred while retrieving data</string>
+    <string name="msg_no_notes">It looks like you don\'t have any notes</string>
+    <string name="msg_note_deleted">Note successfully deleted</string>
+    <string name="msg_note_not_deleted">Failed to delete note</string>
     <string name="msg_note_not_found">Failed to find note</string>
     <string name="msg_note_not_inserted">Failed to create note</string>
+    <string name="msg_select_one_item">Please, select at least one item</string>
     <string name="msg_unexpected_exception">Unexpected error</string>
 
     <string name="placeholder_app_version">Version %s</string>

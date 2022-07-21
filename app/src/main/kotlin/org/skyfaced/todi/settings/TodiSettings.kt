@@ -5,4 +5,6 @@ interface TodiSettings {
     val dynamicColor: Settings<Boolean>
     val amoled: Settings<Boolean>
     val locale: Settings<TodiLocale>
+    val gridCells: Settings<Int>
+    val descriptionMaxLines: Settings<Int>
 }

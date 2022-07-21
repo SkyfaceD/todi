@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,12 +39,13 @@ import org.skyfaced.todi.database.TodiDatabaseImpl
 import org.skyfaced.todi.settings.TodiLocale
 import org.skyfaced.todi.settings.TodiSettingsImpl
 import org.skyfaced.todi.settings.TodiTheme
-import org.skyfaced.todi.ui.model.note.NoteEntityMapper
 import org.skyfaced.todi.ui.screen.details.DetailsRepositoryImpl
 import org.skyfaced.todi.ui.screen.details.DetailsScreen
 import org.skyfaced.todi.ui.screen.details.DetailsViewModel
 import org.skyfaced.todi.ui.screen.details.Mode
+import org.skyfaced.todi.ui.screen.home.HomeRepositoryImpl
 import org.skyfaced.todi.ui.screen.home.HomeScreen
+import org.skyfaced.todi.ui.screen.home.HomeViewModel
 import org.skyfaced.todi.ui.screen.settings.SettingsScreen
 import org.skyfaced.todi.ui.screen.settings.SettingsViewModel
 import org.skyfaced.todi.ui.theme.TodiTheme
@@ -136,9 +139,11 @@ fun TodiApp() {
                     )
                 },
                 content = { innerPadding ->
-                    TodiNavHost(modifier = Modifier
-                        .padding(innerPadding)
-                        .imePadding())
+                    TodiNavHost(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .imePadding()
+                    )
                 }
             )
         }
@@ -282,6 +287,8 @@ private fun TodiNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navHostController = LocalTodiNavigation.current
+    val settings = LocalTodiSettings.current
+    val database = LocalTodiDatabase.current
 
     NavHost(
         modifier = modifier,
@@ -289,7 +296,21 @@ private fun TodiNavHost(
         startDestination = Screens.Home.route
     ) {
         composable(Screens.Home.route) {
-            HomeScreen()
+            val viewModel = viewModel<HomeViewModel>(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        if (!modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+                            throw IllegalArgumentException("Unknown ViewModel class")
+                        }
+
+                        val repository = HomeRepositoryImpl(database.noteDao)
+                        return HomeViewModel(settings, repository) as T
+                    }
+                }
+            )
+
+            HomeScreen(viewModel = viewModel)
         }
 
         composable(
@@ -302,13 +323,21 @@ private fun TodiNavHost(
             val mode = Mode.valueOf(navBackStackEntry.arguments?.getString("mode").orEmpty())
             val id = navBackStackEntry.arguments?.getLong("id") ?: 0L
 
-            val database = LocalTodiDatabase.current
             val viewModel = viewModel<DetailsViewModel>(
-                factory = object : ViewModelProvider.Factory {
+                factory = object : AbstractSavedStateViewModelFactory(navBackStackEntry,
+                    navBackStackEntry.arguments) {
                     @Suppress("UNCHECKED_CAST")
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val repository = DetailsRepositoryImpl(database.noteDao, NoteEntityMapper())
-                        return DetailsViewModel(mode, id, repository) as T
+                    override fun <T : ViewModel> create(
+                        key: String,
+                        modelClass: Class<T>,
+                        handle: SavedStateHandle,
+                    ): T {
+                        if (!modelClass.isAssignableFrom(DetailsViewModel::class.java)) {
+                            throw IllegalArgumentException("Unknown ViewModel class")
+                        }
+
+                        val repository = DetailsRepositoryImpl(database.noteDao)
+                        return DetailsViewModel(repository, handle) as T
                     }
                 }
             )
@@ -321,11 +350,14 @@ private fun TodiNavHost(
         }
 
         composable(Screens.Settings.route) {
-            val settings = LocalTodiSettings.current
             val viewModel = viewModel<SettingsViewModel>(
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        if (!modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
+                            throw IllegalArgumentException("Unknown ViewModel class")
+                        }
+
                         return SettingsViewModel(settings) as T
                     }
                 }

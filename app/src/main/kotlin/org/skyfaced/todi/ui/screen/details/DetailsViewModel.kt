@@ -3,6 +3,7 @@ package org.skyfaced.todi.ui.screen.details
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -11,11 +12,13 @@ import org.skyfaced.todi.util.UiMessageManager
 import org.skyfaced.todi.util.consume
 
 class DetailsViewModel(
-    private val mode: Mode,
-    private val id: Long = 0L,
     private val detailsRepository: DetailsRepository,
+    savedStateHandle: SavedStateHandle,
     private val uiMessageManager: UiMessageManager = UiMessageManager(),
 ) : ViewModel() {
+    private val mode: Mode = Mode.valueOf(savedStateHandle.get<String>("mode").orEmpty())
+    private val id: Long = savedStateHandle.get<Long>("id") ?: 0L
+
     var state by mutableStateOf(DetailsUiState())
         private set
 

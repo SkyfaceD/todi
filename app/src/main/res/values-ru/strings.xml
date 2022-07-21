@@ -3,6 +3,7 @@
     <string name="cd_4pda">Перейти на 4PDA страницу</string>
     <string name="cd_add_note">Перейти в создание заметки</string>
     <string name="cd_back">Назад</string>
+    <string name="cd_delete">Удалить</string>
     <string name="cd_github">Перейти на Github страницу</string>
     <string name="cd_google_play">Перейти на Google Play страницу</string>
     <string name="cd_settings">Перейти в настройки</string>
@@ -17,6 +18,7 @@
     <string name="lbl_description">Описание</string>
     <string name="lbl_dynamic_theme">Динамическая тема</string>
     <string name="lbl_dynamic_theme_summary">Применяет тему приложения, основанную на цветовой палитре обоев устройства</string>
+    <string name="lbl_edit">Изменить</string>
     <string name="lbl_editing">Редактирование</string>
     <string name="lbl_external_links">Внешние ссылки</string>
     <string name="lbl_home">Главная</string>
@@ -24,6 +26,7 @@
     <string name="lbl_language_english">Английски язык</string>
     <string name="lbl_language_russian">Русский язык</string>
     <string name="lbl_ok">Ок</string>
+    <string name="lbl_save">Сохранить</string>
     <string name="lbl_select_language">Выберите язык</string>
     <string name="lbl_select_theme">Выберите тему</string>
     <string name="lbl_settings">Настройки</string>
@@ -32,15 +35,17 @@
     <string name="lbl_theme_dark">Тёмная</string>
     <string name="lbl_theme_light">Светлая</string>
     <string name="lbl_title">Заголовок</string>
+    <string name="lbl_try_again">Попробовать снова</string>
     <string name="lbl_view">Просмотр</string>
 
+    <string name="msg_flow_exception">Произошла ошибка при попытке получить данные</string>
+    <string name="msg_no_notes">Похоже, у Вас нет заметок</string>
+    <string name="msg_note_deleted">Заметка успешно удалена</string>
+    <string name="msg_note_not_deleted">Не удалось удалить заметку</string>
+    <string name="msg_note_not_found">Не удалось найти заметку</string>
+    <string name="msg_note_not_inserted">Не удалось создать заметку</string>
     <string name="msg_select_one_item">Пожалуйста, выьерите хотя бы один элемент</string>
+    <string name="msg_unexpected_exception">Произошла непредвиденная ошибка</string>
 
     <string name="placeholder_app_version">Версия %s</string>
-
-    <string name="lbl_edit">Изменить</string>
-    <string name="lbl_save">Сохранить</string>
-    <string name="msg_note_not_found">Не удалось найти заметку</string>
-    <string name="msg_unexpected_exception">Произошла непредвиденная ошибка</string>
-    <string name="msg_note_not_inserted">Не удалось создать заметку</string>
 </resources>

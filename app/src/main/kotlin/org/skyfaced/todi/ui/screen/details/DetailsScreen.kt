@@ -1,6 +1,8 @@
 package org.skyfaced.todi.ui.screen.details
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -8,7 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.skyfaced.todi.R
@@ -32,8 +38,8 @@ fun DetailsScreen(
         onDescriptionChange = viewModel::updateDescription,
         onButtonClick = {
             if (mode == Mode.View) {
-                navHostController.navigate(Screens.Details.argRoute(mode, id)) {
-                    popUpTo(Screens.Home.route) {
+                navHostController.navigate(Screens.Details.argRoute(Mode.Edit, id)) {
+                    popUpTo(Screens.Details.route) {
                         inclusive = true
                     }
                 }
@@ -54,6 +60,7 @@ private fun DetailsScreen(
     onMessageShown: (Long) -> Unit,
     navigateUp: () -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.upserted) {
@@ -80,7 +87,14 @@ private fun DetailsScreen(
                 value = state.title,
                 onValueChange = onTitleChange,
                 label = { Text(stringResource(R.string.lbl_title)) },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
             )
 
             TodiTextField(
@@ -90,8 +104,7 @@ private fun DetailsScreen(
                 value = state.description,
                 onValueChange = onDescriptionChange,
                 label = { Text(stringResource(R.string.lbl_description)) },
-
-                )
+            )
 
             val text = when (mode) {
                 Mode.View -> R.string.lbl_edit

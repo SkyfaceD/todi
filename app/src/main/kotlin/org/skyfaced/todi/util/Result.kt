@@ -9,9 +9,28 @@ sealed class Result<out T> {
     data class Failure<T>(val cause: ResourceException) : Result<T>()
 }
 
-suspend fun <T> result(action: suspend () -> Result<T>): Result<T> {
+interface ResultScope<T> {
+    fun success(data: T): Result<T>
+
+    fun failure(cause: ResourceException): Result<T>
+}
+
+class ResultScopeImpl<T> : ResultScope<T> {
+    override fun success(data: T): Result<T> {
+        return Result.Success(data)
+    }
+
+    override fun failure(cause: ResourceException): Result<T> {
+        return Result.Failure(cause)
+    }
+}
+
+suspend fun <T> result(
+    scope: ResultScope<T> = ResultScopeImpl(),
+    action: suspend ResultScope<T>.() -> Result<T>,
+): Result<T> {
     return try {
-        action()
+        action(scope)
     } catch (e: Exception) {
         Result.Failure(UnexpectedException())
     }

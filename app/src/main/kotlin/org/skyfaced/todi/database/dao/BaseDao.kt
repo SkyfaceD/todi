@@ -13,14 +13,14 @@ abstract class BaseDao<T> {
     abstract suspend fun insert(entities: List<T>): LongArray
 
     @Update
-    abstract suspend fun update(entity: T)
+    abstract suspend fun update(entity: T): Int
 
     @Update
-    abstract suspend fun update(entities: List<T>)
+    abstract suspend fun update(entities: List<T>): Int
 
     @Delete
-    abstract suspend fun delete(entity: T)
+    abstract suspend fun delete(entity: T): Int
 
     @Delete
-    abstract suspend fun delete(entities: List<T>)
+    abstract suspend fun delete(entities: List<T>): Int
 }

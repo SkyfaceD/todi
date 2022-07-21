@@ -12,7 +12,7 @@ import logcat.logcat
 import java.io.IOException
 
 class TodiSettingsImpl(
-    private val context: Context
+    private val context: Context,
 ) : TodiSettings {
     companion object {
         private val Context.store: DataStore<Preferences> by preferencesDataStore("todi.settings")
@@ -21,6 +21,8 @@ class TodiSettingsImpl(
         private val DynamicColor = booleanPreferencesKey("dynamic_color")
         private val AMOLED = booleanPreferencesKey("amoled")
         private val Locale = intPreferencesKey("locale")
+        private val GridCells = intPreferencesKey("gridCells")
+        private val DescriptionMaxLines = intPreferencesKey("descriptionMaxLines")
     }
 
     override val theme: Settings<TodiTheme> = object : Settings<TodiTheme> {
@@ -57,7 +59,7 @@ class TodiSettingsImpl(
         override val observe: Flow<Boolean>
             get() = context.store.data
                 .catchIO()
-                .map { preferences -> preferences[AMOLED] ?: true }
+                .map { preferences -> preferences[AMOLED] ?: false }
 
         override suspend fun update(newState: Boolean) {
             super.update(newState)
@@ -84,8 +86,36 @@ class TodiSettingsImpl(
 
         override suspend fun update(newState: TodiLocale) {
             super.update(newState)
-            context.store.edit { prefs ->
-                prefs[Locale] = newState.ordinal
+            context.store.edit { preferences ->
+                preferences[Locale] = newState.ordinal
+            }
+        }
+    }
+
+    override val gridCells: Settings<Int> = object : Settings<Int> {
+        override val observe: Flow<Int>
+            get() = context.store.data
+                .catchIO()
+                .map { preferences -> preferences[GridCells] ?: 1 }
+
+        override suspend fun update(newState: Int) {
+            super.update(newState)
+            context.store.edit { preferences ->
+                preferences[GridCells] = newState
+            }
+        }
+    }
+
+    override val descriptionMaxLines: Settings<Int> = object : Settings<Int> {
+        override val observe: Flow<Int>
+            get() = context.store.data
+                .catchIO()
+                .map { preferences -> preferences[DescriptionMaxLines] ?: 3 }
+
+        override suspend fun update(newState: Int) {
+            super.update(newState)
+            context.store.edit { preferences ->
+                preferences[DescriptionMaxLines] = newState
             }
         }
     }
