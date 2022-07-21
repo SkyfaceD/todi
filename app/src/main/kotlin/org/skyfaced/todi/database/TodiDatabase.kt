@@ -2,14 +2,14 @@ package org.skyfaced.todi.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import org.skyfaced.todi.database.dao.TaskDao
-import org.skyfaced.todi.database.entity.TaskEntity
+import org.skyfaced.todi.database.dao.NoteDao
+import org.skyfaced.todi.database.entity.NoteEntity
 
 @Database(
-    entities = [TaskEntity::class],
+    entities = [NoteEntity::class],
     version = 1,
     exportSchema = true,
 )
 abstract class TodiDatabase: RoomDatabase() {
-    abstract val taskDao: TaskDao
+    abstract val noteDao: NoteDao
 }

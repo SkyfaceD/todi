@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
     <string name="cd_4pda">Перейти на 4PDA страницу</string>
-    <string name="cd_add_task">Перейти в создание задачи</string>
+    <string name="cd_add_note">Перейти в создание заметки</string>
     <string name="cd_back">Назад</string>
     <string name="cd_github">Перейти на Github страницу</string>
     <string name="cd_google_play">Перейти на Google Play страницу</string>
@@ -9,7 +9,7 @@
 
     <string name="lbl_about_app">О программе</string>
     <string name="lbl_add">Добавить</string>
-    <string name="lbl_add_task">Добавить задачу</string>
+    <string name="lbl_add_note">Добавить заметку</string>
     <string name="lbl_amoled_support">Поддержка AMOLED</string>
     <string name="lbl_amoled_support_summary">Потребляет меньше заряда батареи на AMOLED экранах</string>
     <string name="lbl_cancel">Отмена</string>
@@ -37,4 +37,10 @@
     <string name="msg_select_one_item">Пожалуйста, выьерите хотя бы один элемент</string>
 
     <string name="placeholder_app_version">Версия %s</string>
+
+    <string name="lbl_edit">Изменить</string>
+    <string name="lbl_save">Сохранить</string>
+    <string name="msg_note_not_found">Не удалось найти заметку</string>
+    <string name="msg_unexpected_exception">Произошла непредвиденная ошибка</string>
+    <string name="msg_note_not_inserted">Не удалось создать заметку</string>
 </resources>

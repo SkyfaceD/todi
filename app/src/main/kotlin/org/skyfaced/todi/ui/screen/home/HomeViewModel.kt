@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.skyfaced.todi.ui.model.task.TaskShort
+import org.skyfaced.todi.ui.model.note.Note
 
 class HomeViewModel : ViewModel() {
     var state by mutableStateOf(HomeUiState())
@@ -12,5 +12,5 @@ class HomeViewModel : ViewModel() {
 }
 
 data class HomeUiState(
-    val list: List<TaskShort> = emptyList()
+    val notes: List<Note> = emptyList(),
 )
