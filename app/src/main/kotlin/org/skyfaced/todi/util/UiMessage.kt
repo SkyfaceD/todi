@@ -19,6 +19,8 @@ data class UiMessage(
     val cause: Throwable? = null,
     val id: Long = UUID.randomUUID().mostSignificantBits,
 ) {
+    var data: Any? = null
+
     init {
         logcat(LogPriority.ERROR) {
             cause?.stackTraceToString() ?: cause?.message ?: "MessageRes: $messageRes"
@@ -34,6 +36,11 @@ fun UiMessage(
     cause = exception,
     id = id,
 )
+
+fun UiMessage.withData(data: Any): UiMessage {
+    this.data = data
+    return this
+}
 
 class UiMessageManager {
     private val mutex = Mutex()

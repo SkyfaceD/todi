@@ -8,6 +8,7 @@ import org.skyfaced.todi.ui.model.note.NoteEntityMapper
 import org.skyfaced.todi.ui.model.note.NoteMapper
 import org.skyfaced.todi.util.Result
 import org.skyfaced.todi.util.exception.NoteNotDeleted
+import org.skyfaced.todi.util.exception.NoteNotInserted
 import org.skyfaced.todi.util.result
 
 class HomeRepositoryImpl(
@@ -23,5 +24,12 @@ class HomeRepositoryImpl(
         val rowCount = noteDao.delete(entity)
         return@result if (rowCount == 1) success(Unit)
         else failure(NoteNotDeleted())
+    }
+
+    override suspend fun insertNote(note: Note): Result<Unit> = result {
+        val entity = noteEntityMapper.map(note)
+        val rowId = noteDao.insert(entity)
+        return if (rowId != -1L) success(Unit)
+        else failure(NoteNotInserted())
     }
 }

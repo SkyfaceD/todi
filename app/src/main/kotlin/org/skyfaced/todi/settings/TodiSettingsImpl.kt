@@ -3,12 +3,18 @@ package org.skyfaced.todi.settings
 import android.content.Context
 import android.os.Build
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import logcat.logcat
+import org.skyfaced.todi.R
 import java.io.IOException
 
 class TodiSettingsImpl(
@@ -75,13 +81,13 @@ class TodiSettingsImpl(
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
-                    val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         context.resources.configuration.locales[0].language
                     } else {
                         context.resources.configuration.locale.language
                     }
 
-                    preferences[Locale]?.let { TodiLocale.from(it) } ?: TodiLocale.from(language)
+                    preferences[Locale]?.let { TodiLocale.from(it) } ?: TodiLocale.from(locale)
                 }
 
         override suspend fun update(newState: TodiLocale) {
@@ -96,7 +102,11 @@ class TodiSettingsImpl(
         override val observe: Flow<Int>
             get() = context.store.data
                 .catchIO()
-                .map { preferences -> preferences[GridCells] ?: 1 }
+                .map { preferences ->
+                    val cells = if (context.resources.getBoolean(R.bool.isTablet)) 3 else 1
+
+                    preferences[GridCells] ?: cells
+                }
 
         override suspend fun update(newState: Int) {
             super.update(newState)

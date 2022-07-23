@@ -3,13 +3,45 @@ package org.skyfaced.todi.ui.screen
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
@@ -52,8 +84,10 @@ import org.skyfaced.todi.ui.theme.TodiTheme
 import org.skyfaced.todi.ui.util.ExtendedFloatingActionButton
 import org.skyfaced.todi.util.LocalTodiDatabase
 import org.skyfaced.todi.util.LocalTodiNavigation
+import org.skyfaced.todi.util.LocalTodiNotifications
 import org.skyfaced.todi.util.LocalTodiSettings
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
+import org.skyfaced.todi.util.notifcations.TodiNotificationsImpl
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +98,9 @@ fun TodiApp() {
 
     val settings = remember { TodiSettingsImpl(context.applicationContext) }
     val database = remember { TodiDatabaseImpl(context.applicationContext).database }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val notifications = remember { TodiNotificationsImpl(context, snackbarHostState) }
 
     val systemUiController = rememberSystemUiController()
     val navHostController = rememberNavController()
@@ -82,7 +119,8 @@ fun TodiApp() {
     CompositionLocalProvider(
         LocalTodiNavigation provides navHostController,
         LocalTodiSettings provides settings,
-        LocalTodiDatabase provides database
+        LocalTodiDatabase provides database,
+        LocalTodiNotifications provides notifications
     ) {
         val locale = settings.locale.observe.collectAsStateWithLifecycle(TodiLocale.English).value
         setLocale(locale)
@@ -126,6 +164,7 @@ fun TodiApp() {
                         locale = locale,
                         navigateUp = navHostController::navigateUp,
                         openSettings = {
+                            notifications.hideSnackbar()
                             navHostController.navigate(Screens.Settings.route)
                         }
                     )
@@ -134,6 +173,7 @@ fun TodiApp() {
                     TodiFloatingActionButton(
                         navBackStackEntry = navBackStackEntry,
                         onClick = {
+                            notifications.hideSnackbar()
                             navHostController.navigate(Screens.Details.argRoute(Mode.Create))
                         }
                     )
@@ -144,7 +184,8 @@ fun TodiApp() {
                             .padding(innerPadding)
                             .imePadding()
                     )
-                }
+                },
+                snackbarHost = { SnackbarHost(hostState = notifications.snackbarHostState) }
             )
         }
     }
@@ -154,6 +195,7 @@ fun TodiApp() {
 private fun TodiFloatingActionButton(
     navBackStackEntry: NavBackStackEntry?,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val enabled = navBackStackEntry?.destination?.route == Screens.Home.route
     val duration = 500
@@ -164,6 +206,7 @@ private fun TodiFloatingActionButton(
         exit = slideOutHorizontally(tween(duration)) { it } + fadeOut(tween(duration)),
     ) {
         ExtendedFloatingActionButton(
+            modifier = modifier,
             onClick = onClick,
             icon = {
                 Icon(
@@ -320,8 +363,10 @@ private fun TodiNavHost(
             )
         ) { navBackStackEntry ->
             val viewModel = viewModel<DetailsViewModel>(
-                factory = object : AbstractSavedStateViewModelFactory(navBackStackEntry,
-                    navBackStackEntry.arguments) {
+                factory = object : AbstractSavedStateViewModelFactory(
+                    navBackStackEntry,
+                    navBackStackEntry.arguments
+                ) {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(
                         key: String,

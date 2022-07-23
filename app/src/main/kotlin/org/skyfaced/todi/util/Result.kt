@@ -2,6 +2,9 @@ package org.skyfaced.todi.util
 
 import org.skyfaced.todi.util.exception.ResourceException
 import org.skyfaced.todi.util.exception.UnexpectedException
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 sealed class Result<out T> {
     data class Success<T>(val data: T) : Result<T>()
@@ -25,23 +28,30 @@ class ResultScopeImpl<T> : ResultScope<T> {
     }
 }
 
-suspend fun <T> result(
-    scope: ResultScope<T> = ResultScopeImpl(),
-    action: suspend ResultScope<T>.() -> Result<T>,
-): Result<T> {
+inline fun <T> result(action: ResultScope<T>.() -> Result<T>): Result<T> {
     return try {
-        action(scope)
+        with(ResultScopeImpl(), action)
     } catch (e: Exception) {
         Result.Failure(UnexpectedException())
     }
 }
 
-fun <T> Result<T>.consume(
-    onSuccess: (data: T) -> Unit = {},
-    onFailure: (ResourceException) -> Unit = {},
-) {
-    when (this) {
-        is Result.Success -> onSuccess(this.data)
-        is Result.Failure -> onFailure(this.cause)
+/** Idea stolen from [kotlin.Result] */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> Result<T>.onSuccess(action: (data: T) -> Unit): Result<T> {
+    contract {
+        callsInPlace(action, InvocationKind.AT_MOST_ONCE)
     }
+    if (this is Result.Success) action(data)
+    return this
+}
+
+/** Idea stolen from [kotlin.Result] */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> Result<T>.onFailure(action: (cause: ResourceException) -> Unit): Result<T> {
+    contract {
+        callsInPlace(action, InvocationKind.AT_MOST_ONCE)
+    }
+    if (this is Result.Failure) action(cause)
+    return this
 }

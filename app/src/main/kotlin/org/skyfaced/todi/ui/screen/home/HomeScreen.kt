@@ -27,11 +27,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,6 +47,7 @@ import org.skyfaced.todi.ui.screen.details.Mode
 import org.skyfaced.todi.ui.util.ContentPadding
 import org.skyfaced.todi.ui.util.ScreenState
 import org.skyfaced.todi.util.LocalTodiNavigation
+import org.skyfaced.todi.util.LocalTodiNotifications
 import org.skyfaced.todi.util.exception.FlowException
 
 @Composable
@@ -58,7 +62,9 @@ fun HomeScreen(
             navHostController.navigate(Screens.Details.argRoute(Mode.Edit, note.id))
         },
         onDeleteItemClick = viewModel::deleteNote,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
+        onMessageShown = viewModel::clearMessage,
+        onUndoClick = viewModel::undo
     )
 }
 
@@ -70,7 +76,27 @@ private fun HomeScreen(
     onItemClick: (Note) -> Unit,
     onDeleteItemClick: (Note) -> Unit,
     onRefresh: () -> Unit,
+    onMessageShown: (Long) -> Unit,
+    onUndoClick: (Note) -> Unit,
 ) {
+    val context = LocalContext.current
+    val notifications = LocalTodiNotifications.current
+
+    state.uiMessage?.let { uiMessage ->
+        LaunchedEffect(uiMessage) {
+            notifications.showSnackbar(
+                message = context.getString(uiMessage.messageRes),
+                actionLabel = if (uiMessage.cause !is FlowException) context.getString(R.string.lbl_undo) else null,
+                withDismissAction = true
+            ).also {
+                if (it == SnackbarResult.ActionPerformed) {
+                    onUndoClick(uiMessage.data as Note)
+                }
+            }
+            onMessageShown(uiMessage.id)
+        }
+    }
+
     val screenState = when {
         state.isLoading -> ScreenState.Loading
         !state.isLoading && state.notes != null && state.notes.isNotEmpty() -> ScreenState.Success
@@ -123,7 +149,8 @@ private fun HomeScreen(
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(state.gridCells),
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = ListPadding.toPaddingValues(),
+                        contentPadding = ContentPadding(16.dp).copy(bottom = 96.dp)
+                            .toPaddingValues(),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
@@ -204,5 +231,3 @@ private fun Item(
         }
     }
 }
-
-private val ListPadding = ContentPadding(16.dp).copy(bottom = 72.dp)

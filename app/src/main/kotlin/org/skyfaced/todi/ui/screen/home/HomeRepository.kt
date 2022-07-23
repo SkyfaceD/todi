@@ -8,4 +8,6 @@ interface HomeRepository {
     val notesFlow: Flow<List<Note>>
 
     suspend fun deleteNote(note: Note): Result<Unit>
+
+    suspend fun insertNote(note: Note): Result<Unit>
 }

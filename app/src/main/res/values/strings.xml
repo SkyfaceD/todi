@@ -39,6 +39,7 @@
     <string name="lbl_theme_light">Light</string>
     <string name="lbl_title">Title</string>
     <string name="lbl_try_again">Try again</string>
+    <string name="lbl_undo">Undo</string>
     <string name="lbl_view_grid">Grid</string>
     <string name="lbl_view_linear">Linear</string>
     <string name="lbl_view_select_list_type">Select list view type</string>

@@ -36,6 +36,7 @@
     <string name="lbl_theme_light">Светлая</string>
     <string name="lbl_title">Заголовок</string>
     <string name="lbl_try_again">Попробовать снова</string>
+    <string name="lbl_undo">Отменить</string>
     <string name="lbl_view_grid">Сеткой</string>
     <string name="lbl_view_linear">Построчно</string>
     <string name="lbl_view_select_list_type">Выберите тип списка</string>

@@ -9,7 +9,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.skyfaced.todi.util.UiMessage
 import org.skyfaced.todi.util.UiMessageManager
-import org.skyfaced.todi.util.consume
+import org.skyfaced.todi.util.onFailure
+import org.skyfaced.todi.util.onSuccess
 
 class DetailsViewModel(
     private val detailsRepository: DetailsRepository,
@@ -41,19 +42,17 @@ class DetailsViewModel(
     fun upsert() {
         viewModelScope.launch {
             state = state.copy(isUpserting = true)
-            detailsRepository.upsertNote(id, state.title, state.description).consume(
-                onSuccess = { state = state.copy(isUpserting = false, upserted = true) },
-                onFailure = { state = state.copy(isUpserting = false, uiMessage = UiMessage(it)) }
-            )
+            detailsRepository.upsertNote(id, state.title, state.description)
+                .onSuccess { state = state.copy(isUpserting = false, upserted = true) }
+                .onFailure { state = state.copy(isUpserting = false, uiMessage = UiMessage(it)) }
         }
     }
 
     private fun fetchNote() {
         viewModelScope.launch {
-            detailsRepository.fetchNoteById(id).consume(
-                onSuccess = { state = state.copy(title = it.title, description = it.description) },
-                onFailure = { state = state.copy(uiMessage = UiMessage(it)) }
-            )
+            detailsRepository.fetchNoteById(id)
+                .onSuccess { state = state.copy(title = it.title, description = it.description) }
+                .onFailure { state = state.copy(uiMessage = UiMessage(it)) }
         }
     }
 }

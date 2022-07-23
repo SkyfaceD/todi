@@ -15,13 +15,15 @@ import org.skyfaced.todi.settings.TodiSettings
 import org.skyfaced.todi.ui.model.note.Note
 import org.skyfaced.todi.util.UiMessage
 import org.skyfaced.todi.util.UiMessageManager
-import org.skyfaced.todi.util.consume
 import org.skyfaced.todi.util.exception.FlowException
+import org.skyfaced.todi.util.onFailure
+import org.skyfaced.todi.util.onSuccess
+import org.skyfaced.todi.util.withData
 
 class HomeViewModel(
     private val settings: TodiSettings,
     private val homeRepository: HomeRepository,
-    private val uiMessageManager: UiMessageManager = UiMessageManager(),
+    private val uiMessageManager: UiMessageManager = UiMessageManager()
 ) : ViewModel() {
     var state by mutableStateOf(HomeUiState())
         private set
@@ -32,6 +34,7 @@ class HomeViewModel(
         viewModelScope.launch {
             applySettings()
             fetchNotes()
+            messages()
         }
     }
 
@@ -41,12 +44,11 @@ class HomeViewModel(
 
     fun deleteNote(note: Note) {
         viewModelScope.launch {
-            homeRepository.deleteNote(note).consume(
-                onSuccess = {
-                    state = state.copy(uiMessage = UiMessage(R.string.msg_note_deleted))
-                },
-                onFailure = { state = state.copy(uiMessage = UiMessage(it)) }
-            )
+            homeRepository.deleteNote(note)
+                .onSuccess {
+                    uiMessageManager.emitMessage(UiMessage(R.string.msg_note_deleted).withData(note))
+                }
+                .onFailure { uiMessageManager.emitMessage(UiMessage(it)) }
         }
     }
 
@@ -54,6 +56,13 @@ class HomeViewModel(
         state = state.copy(notes = null)
         notesJob?.cancel()
         fetchNotes()
+    }
+
+    fun undo(note: Note) {
+        viewModelScope.launch {
+            homeRepository.insertNote(note)
+                .onFailure { uiMessageManager.emitMessage(UiMessage(it)) }
+        }
     }
 
     private fun applySettings() {
@@ -75,11 +84,19 @@ class HomeViewModel(
             homeRepository.notesFlow
                 .onStart { state = state.copy(isLoading = true) }
                 .catch {
-                    state = state.copy(isLoading = false, uiMessage = UiMessage(FlowException()))
+                    uiMessageManager.emitMessage(UiMessage(FlowException()))
+                    state = state.copy(isLoading = false)
                 }
                 .collect { state = state.copy(isLoading = false, notes = it) }
         }
         notesJob?.start()
+    }
+
+    private fun messages() {
+        viewModelScope.launch {
+            uiMessageManager.message
+                .collect { state = state.copy(uiMessage = it) }
+        }
     }
 }
 
