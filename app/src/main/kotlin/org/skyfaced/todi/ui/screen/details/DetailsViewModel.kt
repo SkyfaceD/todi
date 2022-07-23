@@ -25,6 +25,7 @@ class DetailsViewModel(
 
     init {
         if (id != 0L) fetchNote()
+        messages()
     }
 
     fun clearMessage(id: Long) {
@@ -44,7 +45,10 @@ class DetailsViewModel(
             state = state.copy(isUpserting = true)
             detailsRepository.upsertNote(id, state.title, state.description)
                 .onSuccess { state = state.copy(isUpserting = false, upserted = true) }
-                .onFailure { state = state.copy(isUpserting = false, uiMessage = UiMessage(it)) }
+                .onFailure {
+                    uiMessageManager.emitMessage(UiMessage(it))
+                    state = state.copy(isUpserting = false)
+                }
         }
     }
 
@@ -52,7 +56,14 @@ class DetailsViewModel(
         viewModelScope.launch {
             detailsRepository.fetchNoteById(id)
                 .onSuccess { state = state.copy(title = it.title, description = it.description) }
-                .onFailure { state = state.copy(uiMessage = UiMessage(it)) }
+                .onFailure { uiMessageManager.emitMessage(UiMessage(it)) }
+        }
+    }
+
+    private fun messages() {
+        viewModelScope.launch {
+            uiMessageManager.message
+                .collect { state = state.copy(uiMessage = it) }
         }
     }
 }
