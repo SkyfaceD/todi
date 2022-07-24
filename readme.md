@@ -18,7 +18,7 @@
 - [Material Components](https://m3.material.io/) - an adaptable system of guidelines, components,
   and tools that support the best practices of user interface design
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-  + [Flow](https://developer.android.com/kotlin/flow) - asynchronous world
+  and [Flow](https://developer.android.com/kotlin/flow) - asynchronous world
 - [Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) - perform actions
   in response to a change in the lifecycle status of another component, such as activities and
   fragments
