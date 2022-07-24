@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.skyfaced.todi.ui.model.note.Note
+import org.skyfaced.todi.util.Mode
 import org.skyfaced.todi.util.UiMessage
 import org.skyfaced.todi.util.UiMessageManager
 import org.skyfaced.todi.util.onFailure

@@ -21,6 +21,22 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
+
+        bundle {
+            language {
+                enableSplit = false
+            }
+        }
+        resourceConfigurations.addAll(listOf("en", "ru"))
+    }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = getLocalProperty("alias")
+            keyPassword = getLocalProperty("key")
+            storeFile = file(getLocalProperty("path"))
+            storePassword = getLocalProperty("store")
+        }
     }
 
     buildTypes {
@@ -38,6 +54,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "${projectDir}/proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -82,6 +99,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc")
 
     // Compose
+    // TODO Update after stable release
     implementation("androidx.compose.ui:ui:1.2.0-rc03")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-rc03")
     implementation("androidx.compose.foundation:foundation:1.2.0-rc03")

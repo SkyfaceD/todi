@@ -1,7 +1,6 @@
 package org.skyfaced.todi.ui.screen.home
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,11 +41,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.skyfaced.todi.R
 import org.skyfaced.todi.ui.model.note.Note
 import org.skyfaced.todi.ui.screen.Screens
-import org.skyfaced.todi.ui.screen.details.Mode
-import org.skyfaced.todi.ui.util.ContentPadding
-import org.skyfaced.todi.ui.util.ScreenState
+import org.skyfaced.todi.util.ContentPadding
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiNotifications
+import org.skyfaced.todi.util.Mode
+import org.skyfaced.todi.util.ScreenState
 import org.skyfaced.todi.util.exception.FlowException
 
 @Composable
@@ -55,10 +53,12 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
 ) {
     val navHostController = LocalTodiNavigation.current
+    val notifications = LocalTodiNotifications.current
 
     HomeScreen(
         state = viewModel.state,
         onItemClick = { note ->
+            notifications.hideSnackbar()
             navHostController.navigate(Screens.Details.argRoute(Mode.Edit, note.id))
         },
         onDeleteItemClick = viewModel::deleteNote,
@@ -68,7 +68,6 @@ fun HomeScreen(
     )
 }
 
-// TODO Laggy when switch between screen states
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeScreen(
@@ -129,7 +128,7 @@ private fun HomeScreen(
                 ) {
                     Icon(
                         modifier = Modifier.size(128.dp),
-                        painter = painterResource(R.drawable.ic_note), // TODO Replace icon
+                        painter = painterResource(R.drawable.ic_error),
                         contentDescription = null
                     )
                     val message = state.uiMessage?.messageRes ?: R.string.msg_unexpected_exception
@@ -209,7 +208,7 @@ private fun Item(
                     modifier = Modifier.size(36.dp),
                     shape = CircleShape,
                     onClick = onDeleteItemClick,
-                    border = BorderStroke(0.dp, Color.Transparent),
+                    border = null,
                     contentPadding = PaddingValues(0.dp),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {

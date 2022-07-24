@@ -1,6 +1,6 @@
 package org.skyfaced.todi.ui.screen
 
-import org.skyfaced.todi.ui.screen.details.Mode
+import org.skyfaced.todi.util.Mode
 
 sealed class Screens(val route: String) {
     object Home : Screens("home")

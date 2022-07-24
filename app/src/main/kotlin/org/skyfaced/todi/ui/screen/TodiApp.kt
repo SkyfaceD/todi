@@ -81,7 +81,6 @@ import org.skyfaced.todi.settings.TodiTheme
 import org.skyfaced.todi.ui.screen.details.DetailsRepositoryImpl
 import org.skyfaced.todi.ui.screen.details.DetailsScreen
 import org.skyfaced.todi.ui.screen.details.DetailsViewModel
-import org.skyfaced.todi.ui.screen.details.Mode
 import org.skyfaced.todi.ui.screen.home.HomeRepositoryImpl
 import org.skyfaced.todi.ui.screen.home.HomeScreen
 import org.skyfaced.todi.ui.screen.home.HomeViewModel
@@ -94,6 +93,7 @@ import org.skyfaced.todi.util.LocalTodiExtendedFloatingActionButton
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiNotifications
 import org.skyfaced.todi.util.LocalTodiSettings
+import org.skyfaced.todi.util.Mode
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
 import org.skyfaced.todi.util.fab.TodiExtendedFloatingActionButton
 import org.skyfaced.todi.util.fab.TodiExtendedFloatingActionButtonImpl

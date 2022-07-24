@@ -25,6 +25,7 @@ import org.skyfaced.todi.ui.util.TodiButton
 import org.skyfaced.todi.ui.util.TodiTextField
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiNotifications
+import org.skyfaced.todi.util.Mode
 
 @Composable
 fun DetailsScreen(

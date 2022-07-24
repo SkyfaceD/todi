@@ -406,8 +406,8 @@ private fun Dialogs(
     if (aboutDialog.value) {
         //@formatter:off
         val items = listOf(
-            ExternalLinkData(R.drawable.ic_4pda, R.string.cd_4pda, "https://4pda.to/"),
-            ExternalLinkData(R.drawable.ic_google_play, R.string.cd_google_play, "https://play.google.com/store/apps"),
+//            ExternalLinkData(R.drawable.ic_4pda, R.string.cd_4pda, "https://4pda.to/"),
+//            ExternalLinkData(R.drawable.ic_google_play, R.string.cd_google_play, "https://play.google.com/store/apps"),
             ExternalLinkData(R.drawable.ic_github, R.string.cd_github, "https://github.com/SkyfaceD/todi"),
         )
         //@formatter:on

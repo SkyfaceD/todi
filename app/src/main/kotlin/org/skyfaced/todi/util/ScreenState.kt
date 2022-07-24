@@ -1,4 +1,4 @@
-package org.skyfaced.todi.ui.util
+package org.skyfaced.todi.util
 
 sealed class ScreenState {
     object Loading : ScreenState()
