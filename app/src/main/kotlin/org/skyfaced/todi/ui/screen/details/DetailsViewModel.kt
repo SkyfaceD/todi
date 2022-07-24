@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import org.skyfaced.todi.ui.model.note.Note
 import org.skyfaced.todi.util.UiMessage
 import org.skyfaced.todi.util.UiMessageManager
 import org.skyfaced.todi.util.onFailure
@@ -24,8 +25,10 @@ class DetailsViewModel(
         private set
 
     init {
-        if (id != 0L) fetchNote()
-        messages()
+        viewModelScope.launch {
+            subscribeOnMessages()
+            if (id != 0L) fetchNote() else createNote()
+        }
     }
 
     fun clearMessage(id: Long) {
@@ -33,17 +36,17 @@ class DetailsViewModel(
     }
 
     fun updateTitle(title: String) {
-        state = state.copy(title = title)
+        state = state.copy(note = state.note?.copy(title = title))
     }
 
     fun updateDescription(description: String) {
-        state = state.copy(description = description)
+        state = state.copy(note = state.note?.copy(description = description))
     }
 
     fun upsert() {
         viewModelScope.launch {
             state = state.copy(isUpserting = true)
-            detailsRepository.upsertNote(id, state.title, state.description)
+            detailsRepository.upsertNote(state.note!!)
                 .onSuccess { state = state.copy(isUpserting = false, upserted = true) }
                 .onFailure {
                     uiMessageManager.emitMessage(UiMessage(it))
@@ -52,25 +55,27 @@ class DetailsViewModel(
         }
     }
 
+    private fun createNote() {
+        state = state.copy(note = Note(0, "", ""))
+    }
+
     private fun fetchNote() {
         viewModelScope.launch {
             detailsRepository.fetchNoteById(id)
-                .onSuccess { state = state.copy(title = it.title, description = it.description) }
+                .onSuccess { state = state.copy(note = it) }
                 .onFailure { uiMessageManager.emitMessage(UiMessage(it)) }
         }
     }
 
-    private fun messages() {
+    private fun subscribeOnMessages() {
         viewModelScope.launch {
-            uiMessageManager.message
-                .collect { state = state.copy(uiMessage = it) }
+            uiMessageManager.message.collect { state = state.copy(uiMessage = it) }
         }
     }
 }
 
 data class DetailsUiState(
-    val title: String = "",
-    val description: String = "",
+    val note: Note? = null,
     val uiMessage: UiMessage? = null,
     val isUpserting: Boolean = false,
     val upserted: Boolean = false,

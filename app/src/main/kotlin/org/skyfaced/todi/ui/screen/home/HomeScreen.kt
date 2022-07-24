@@ -129,7 +129,7 @@ private fun HomeScreen(
                 ) {
                     Icon(
                         modifier = Modifier.size(128.dp),
-                        painter = painterResource(R.drawable.ic_note), // Replace icon
+                        painter = painterResource(R.drawable.ic_note), // TODO Replace icon
                         contentDescription = null
                     )
                     val message = state.uiMessage?.messageRes ?: R.string.msg_unexpected_exception
@@ -147,8 +147,8 @@ private fun HomeScreen(
             ScreenState.Success -> {
                 state.notes?.let { notes ->
                     LazyVerticalGrid(
-                        columns = GridCells.Fixed(state.gridCells),
                         modifier = Modifier.fillMaxSize(),
+                        columns = GridCells.Fixed(state.gridCells),
                         contentPadding = ContentPadding(16.dp).copy(bottom = 96.dp)
                             .toPaddingValues(),
                         verticalArrangement = Arrangement.spacedBy(16.dp),

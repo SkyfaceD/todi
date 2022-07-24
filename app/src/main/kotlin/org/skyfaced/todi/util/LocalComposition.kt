@@ -4,6 +4,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController
 import org.skyfaced.todi.database.TodiDatabase
 import org.skyfaced.todi.settings.TodiSettings
+import org.skyfaced.todi.util.fab.TodiExtendedFloatingActionButton
 import org.skyfaced.todi.util.notifcations.TodiNotifications
 
 val LocalTodiNavigation = staticCompositionLocalOf<NavHostController> { error("Not provided") }
@@ -13,3 +14,6 @@ val LocalTodiSettings = staticCompositionLocalOf<TodiSettings> { error("Not prov
 val LocalTodiDatabase = staticCompositionLocalOf<TodiDatabase> { error("Not provided") }
 
 val LocalTodiNotifications = staticCompositionLocalOf<TodiNotifications> { error("Not provided") }
+
+val LocalTodiExtendedFloatingActionButton =
+    staticCompositionLocalOf<TodiExtendedFloatingActionButton> { error("Not provided") }

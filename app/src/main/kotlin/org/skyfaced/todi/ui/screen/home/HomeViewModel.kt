@@ -33,8 +33,8 @@ class HomeViewModel(
     init {
         viewModelScope.launch {
             applySettings()
+            subscribeOnMessages()
             fetchNotes()
-            messages()
         }
     }
 
@@ -92,17 +92,16 @@ class HomeViewModel(
         notesJob?.start()
     }
 
-    private fun messages() {
+    private fun subscribeOnMessages() {
         viewModelScope.launch {
-            uiMessageManager.message
-                .collect { state = state.copy(uiMessage = it) }
+            uiMessageManager.message.collect { state = state.copy(uiMessage = it) }
         }
     }
 }
 
 data class HomeUiState(
     val gridCells: Int = 1,
-    val descriptionMaxLines: Int = 2,
+    val descriptionMaxLines: Int = 3,
     val notes: List<Note>? = null,
     val isLoading: Boolean = true,
     val uiMessage: UiMessage? = null,

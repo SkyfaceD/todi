@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -41,11 +42,17 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -83,12 +90,16 @@ import org.skyfaced.todi.ui.screen.settings.SettingsViewModel
 import org.skyfaced.todi.ui.theme.TodiTheme
 import org.skyfaced.todi.ui.util.ExtendedFloatingActionButton
 import org.skyfaced.todi.util.LocalTodiDatabase
+import org.skyfaced.todi.util.LocalTodiExtendedFloatingActionButton
 import org.skyfaced.todi.util.LocalTodiNavigation
 import org.skyfaced.todi.util.LocalTodiNotifications
 import org.skyfaced.todi.util.LocalTodiSettings
 import org.skyfaced.todi.util.collectAsStateWithLifecycle
+import org.skyfaced.todi.util.fab.TodiExtendedFloatingActionButton
+import org.skyfaced.todi.util.fab.TodiExtendedFloatingActionButtonImpl
 import org.skyfaced.todi.util.notifcations.TodiNotificationsImpl
 import java.util.*
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,9 +109,10 @@ fun TodiApp() {
 
     val settings = remember { TodiSettingsImpl(context.applicationContext) }
     val database = remember { TodiDatabaseImpl(context.applicationContext).database }
-
     val snackbarHostState = remember { SnackbarHostState() }
     val notifications = remember { TodiNotificationsImpl(context, snackbarHostState) }
+    val expanded = remember { mutableStateOf(true) }
+    val fab = remember { TodiExtendedFloatingActionButtonImpl(expanded) }
 
     val systemUiController = rememberSystemUiController()
     val navHostController = rememberNavController()
@@ -120,7 +132,8 @@ fun TodiApp() {
         LocalTodiNavigation provides navHostController,
         LocalTodiSettings provides settings,
         LocalTodiDatabase provides database,
-        LocalTodiNotifications provides notifications
+        LocalTodiNotifications provides notifications,
+        LocalTodiExtendedFloatingActionButton provides fab
     ) {
         val locale = settings.locale.observe.collectAsStateWithLifecycle(TodiLocale.English).value
         setLocale(locale)
@@ -154,8 +167,27 @@ fun TodiApp() {
                 )
             }
 
+            val nestedScrollConnection = remember {
+                object : NestedScrollConnection {
+                    override fun onPostScroll(
+                        consumed: Offset,
+                        available: Offset,
+                        source: NestedScrollSource
+                    ): Offset {
+                        var y = consumed.y
+                        if (abs(y) < 1e-3) y = 0f
+
+                        if (-y < 0 && !fab.expanded.value) fab.expand()
+                        else if (-y > 0 && fab.expanded.value) fab.shrink()
+
+                        return super.onPostScroll(consumed, available, source)
+                    }
+                }
+            }
+
             Scaffold(
                 modifier = Modifier
+                    .nestedScroll(nestedScrollConnection)
                     .systemBarsPadding()
                     .navigationBarsPadding(),
                 topBar = {
@@ -171,6 +203,7 @@ fun TodiApp() {
                 },
                 floatingActionButton = {
                     TodiFloatingActionButton(
+                        fab = fab,
                         navBackStackEntry = navBackStackEntry,
                         onClick = {
                             notifications.hideSnackbar()
@@ -185,7 +218,20 @@ fun TodiApp() {
                             .imePadding()
                     )
                 },
-                snackbarHost = { SnackbarHost(hostState = notifications.snackbarHostState) }
+                snackbarHost = {
+                    val v20px = with(LocalDensity.current) { 20.toDp() }
+                    logcat("Asd") { "Random $v20px" }
+
+                    SnackbarHost(
+                        hostState = notifications.snackbarHostState,
+                        snackbar = {
+                            Snackbar(
+                                snackbarData = it,
+                                shape = MaterialTheme.shapes.extraLarge
+                            )
+                        }
+                    )
+                }
             )
         }
     }
@@ -193,6 +239,7 @@ fun TodiApp() {
 
 @Composable
 private fun TodiFloatingActionButton(
+    fab: TodiExtendedFloatingActionButton,
     navBackStackEntry: NavBackStackEntry?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -217,6 +264,7 @@ private fun TodiFloatingActionButton(
             text = { Text(stringResource(R.string.lbl_add_note)) },
             elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
             enabled = enabled,
+            expanded = fab.expanded.value,
             shape = MaterialTheme.shapes.extraLarge
         )
     }
