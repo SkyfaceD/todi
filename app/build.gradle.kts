@@ -11,8 +11,8 @@ android {
         applicationId = "org.skyfaced.noti"
         minSdk = 21
         targetSdk = 32
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = config.version.code
+        versionName = config.version.name
 
         vectorDrawables {
             useSupportLibrary = true
