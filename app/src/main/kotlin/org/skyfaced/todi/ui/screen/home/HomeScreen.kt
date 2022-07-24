@@ -159,7 +159,10 @@ private fun HomeScreen(
                                 item = item,
                                 descriptionMaxLines = state.descriptionMaxLines,
                                 onItemClick = { onItemClick(item) },
-                                onDeleteItemClick = { onDeleteItemClick(item) }
+                                onDeleteItemClick = {
+                                    notifications.hideSnackbar()
+                                    onDeleteItemClick(item)
+                                }
                             )
                         }
                     }
