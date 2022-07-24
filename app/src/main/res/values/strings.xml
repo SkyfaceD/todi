@@ -13,7 +13,7 @@
     <string name="lbl_add_note">Add note</string>
     <string name="lbl_amoled_support">AMOLED support</string>
     <string name="lbl_amoled_support_summary">Uses less power on AMOLED screens</string>
-    <string name="lbl_app_name" translatable="false">Todi</string>
+    <string name="lbl_app_name" translatable="false">NOTI</string>
     <string name="lbl_cancel">Cancel</string>
     <string name="lbl_column_number">Number of columns</string>
     <string name="lbl_creating">Creating</string>

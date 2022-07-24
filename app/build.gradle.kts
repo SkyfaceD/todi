@@ -8,7 +8,7 @@ android {
     compileSdk = 32
 
     defaultConfig {
-        applicationId = "org.skyfaced.todi"
+        applicationId = "org.skyfaced.noti"
         minSdk = 21
         targetSdk = 32
         versionCode = 1
