@@ -29,6 +29,7 @@
   navigation drawer
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - is a data
   storage solution that allows you to store key-value pairs or typed objects with protocol buffers
+- [Room](https://developer.android.com/training/data-storage/room) - the Room persistence library provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite
 
 # Screenshots
 
