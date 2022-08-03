@@ -8,6 +8,12 @@
     <a href="https://wakatime.com/projects/noti"><img alt="WakaTime" src="https://wakatime.com/badge/user/1a9f3ef6-846f-49d3-9216-c03b6d661710/project/51a83ef1-920e-43ec-871b-1a6243bbd4ef.svg?style=flat-square"></a>
 </p>
 
+# Download
+<div dir="auto" style="display: flex;align-items: center;">
+<a href='https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width='200' height='75'/></a>
+or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>releases section</a>
+</div>
+
 # Stack
 
 - [Kotlin](https://kotlinlang.org/) - a modern programming language that makes developers happier
@@ -40,7 +46,7 @@
 # Build
 
 ### Requirements
-
+- Android Studio Chipmunk | 2021.2.1+
 - Android SDK 21+
 - Gradle 7.5+
 - Java 11+
