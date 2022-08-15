@@ -9,10 +9,10 @@
 </p>
 
 # Download
-<div dir="auto" style="display: flex;align-items: center;">
-<a href='https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width='200' height='75'/></a>
+<a href='https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='.github/screenshots/google_play.png' width='175' height='50'/></a>
+<a href='https://appgallery.huawei.com/app/C106876647'><img alt='Get it on App Gallery' src='.github/screenshots/app_gallery.png' width='175' height='50'/></a>
+
 or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>releases section</a>
-</div>
 
 # Stack
 
