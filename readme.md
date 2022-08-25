@@ -1,3 +1,5 @@
+![](.github/screenshots/banner_github.png)
+
 <h1 align="center">NOTI</h1>
 <h3 align="center">Your simple note application</h3>
 
@@ -11,6 +13,7 @@
 # Download
 <a href='https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='.github/screenshots/google_play.png' width='175' height='50'/></a>
 <a href='https://appgallery.huawei.com/app/C106876647'><img alt='Get it on App Gallery' src='.github/screenshots/app_gallery.png' width='175' height='50'/></a>
+<a href='https://www.amazon.com/dp/B0B9NZ9X1G/ref=sr_1_2?crid=E70Z7LWY9ULN&keywords=noti+app&qid=1661438584&sprefix=noti+ap%2Caps%2C252&sr=8-2'><img alt='Get it on Amazon Appstore' src='.github/screenshots/amazon_appstore.png' width='175' height='50'/></a>
 
 or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>releases section</a>
 
