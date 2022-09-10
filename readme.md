@@ -17,6 +17,8 @@
 
 or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>releases section</a>
 
+or try a demo on <a href='https://wolfia.com/magic-link/762f2be2-d412-463e-828f-bef732912a4c'>wolfia</a> (Authentication required).
+
 # Stack
 
 - [Kotlin](https://kotlinlang.org/) - a modern programming language that makes developers happier
