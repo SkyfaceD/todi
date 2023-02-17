@@ -65,7 +65,7 @@ or try a demo on <a href='https://wolfia.com/magic-link/762f2be2-d412-463e-828f-
 ```
 MIT License
 
-Copyright (c) 2022 Atabayev Muslim (@SkyfaceD)
+Copyright (c) 2022-2023 Atabayev Muslim (@SkyfaceD)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
