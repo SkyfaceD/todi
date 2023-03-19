@@ -1,3 +1,5 @@
+![](.github/screenshots/banner_github.png)
+
 <h1 align="center">NOTI</h1>
 <h3 align="center">Your simple note application</h3>
 
@@ -7,6 +9,15 @@
     <a href="https://github.com/SkyfaceD/noti/releases"><img alt="Release" src="https://img.shields.io/github/v/release/skyfaced/noti?include_prereleases&style=flat-square"></a>
     <a href="https://wakatime.com/projects/noti"><img alt="WakaTime" src="https://wakatime.com/badge/user/1a9f3ef6-846f-49d3-9216-c03b6d661710/project/51a83ef1-920e-43ec-871b-1a6243bbd4ef.svg?style=flat-square"></a>
 </p>
+
+# Download
+<a href='https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='.github/screenshots/google_play.png' width='175' height='50'/></a>
+<a href='https://appgallery.huawei.com/app/C106876647'><img alt='Get it on App Gallery' src='.github/screenshots/app_gallery.png' width='175' height='50'/></a>
+<a href='https://www.amazon.com/dp/B0B9NZ9X1G/ref=sr_1_2?crid=E70Z7LWY9ULN&keywords=noti+app&qid=1661438584&sprefix=noti+ap%2Caps%2C252&sr=8-2'><img alt='Get it on Amazon Appstore' src='.github/screenshots/amazon_appstore.png' width='175' height='50'/></a>
+
+or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>releases section</a>
+
+or try a demo on <a href='https://wolfia.com/magic-link/762f2be2-d412-463e-828f-bef732912a4c'>wolfia</a> (Authentication required).
 
 # Stack
 
@@ -29,6 +40,7 @@
   navigation drawer
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - is a data
   storage solution that allows you to store key-value pairs or typed objects with protocol buffers
+- [Room](https://developer.android.com/training/data-storage/room) - the Room persistence library provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite
 
 # Screenshots
 
@@ -39,7 +51,7 @@
 # Build
 
 ### Requirements
-
+- Android Studio Chipmunk | 2021.2.1+
 - Android SDK 21+
 - Gradle 7.5+
 - Java 11+
@@ -53,7 +65,7 @@
 ```
 MIT License
 
-Copyright (c) 2022 Atabayev Muslim (@SkyfaceD)
+Copyright (c) 2022-2023 Atabayev Muslim (@SkyfaceD)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
