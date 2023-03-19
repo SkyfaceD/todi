@@ -62,12 +62,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     buildFeatures {
@@ -75,7 +75,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 
     packagingOptions {
@@ -93,23 +93,22 @@ android {
 
 dependencies {
     // Core
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
-    implementation("androidx.activity:activity-compose:1.5.0")
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
+    implementation("androidx.activity:activity-compose:1.6.1")
 
     // UI
     implementation("androidx.compose.material3:material3:1.0.0-alpha14")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
 
     // Compose
-    // TODO Update after stable release
-    implementation("androidx.compose.ui:ui:1.2.0-rc03")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-rc03")
-    implementation("androidx.compose.foundation:foundation:1.2.0-rc03")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.2.0-rc03")
+    implementation("androidx.compose.ui:ui:1.3.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.3.3")
+    implementation("androidx.compose.foundation:foundation:1.3.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.3.3")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.5.0")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     // Database
     implementation("androidx.room:room-runtime:2.4.2")
