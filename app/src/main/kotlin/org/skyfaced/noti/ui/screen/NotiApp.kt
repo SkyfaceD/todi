@@ -454,7 +454,7 @@ private fun NotiNavHost(
 /**
  * Experimental function
  */
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "unused")
 fun setLocale(
     context: Context,
     configuration: Configuration,
