@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
@@ -45,7 +43,6 @@ fun ExtendedFloatingActionButton(
     shape: Shape = MaterialTheme.shapes.large,
     containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
     contentColor: Color = contentColorFor(containerColor),
-    elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
 ) {
     FloatingActionButton(
         modifier = modifier.sizeIn(
@@ -56,7 +53,6 @@ fun ExtendedFloatingActionButton(
         shape = shape,
         containerColor = containerColor,
         contentColor = contentColor,
-        elevation = elevation,
         enabled = enabled
     ) {
         val startPadding = if (expanded) IconSize / 2 else 0.dp
@@ -91,7 +87,6 @@ fun FloatingActionButton(
     shape: Shape = MaterialTheme.shapes.large,
     containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
     contentColor: Color = contentColorFor(containerColor),
-    elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
     content: @Composable () -> Unit,
 ) {
     Surface(
@@ -100,8 +95,6 @@ fun FloatingActionButton(
         shape = shape,
         color = containerColor,
         contentColor = contentColor,
-        tonalElevation = elevation.tonalElevation(interactionSource = interactionSource).value,
-        shadowElevation = elevation.shadowElevation(interactionSource = interactionSource).value,
         interactionSource = interactionSource,
         enabled = enabled
     ) {

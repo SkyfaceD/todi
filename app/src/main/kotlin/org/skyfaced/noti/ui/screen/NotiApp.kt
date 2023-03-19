@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -262,7 +261,6 @@ private fun NotiFloatingActionButton(
                 )
             },
             text = { Text(stringResource(R.string.lbl_add_note)) },
-            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
             enabled = enabled,
             expanded = fab.expanded.value,
             shape = MaterialTheme.shapes.extraLarge
@@ -270,7 +268,7 @@ private fun NotiFloatingActionButton(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun NotiTopBar(
     navBackStackEntry: NavBackStackEntry?,
