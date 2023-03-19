@@ -6,6 +6,8 @@ plugins {
 
 @Suppress("UnstableApiUsage")
 android {
+    namespace = "org.skyfaced.noti"
+
     compileSdk = 33
 
     defaultConfig {
