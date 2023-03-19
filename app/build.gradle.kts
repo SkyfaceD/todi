@@ -4,13 +4,14 @@ plugins {
     kotlin("android")
 }
 
+@Suppress("UnstableApiUsage")
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "org.skyfaced.noti"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = config.version.code
         versionName = config.version.name
 
