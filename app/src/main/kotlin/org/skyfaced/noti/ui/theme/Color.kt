@@ -30,7 +30,6 @@ private val lightOutline = Color(0xFF73777F)
 private val lightInverseOnSurface = Color(0xFFF1F0F4)
 private val lightInverseSurface = Color(0xFF2F3033)
 private val lightInversePrimary = Color(0xFF9FCAFF)
-private val lightShadow = Color(0xFF000000)
 private val lightSurfaceTint = Color(0xFF0861A4)
 
 private val darkPrimary = Color(0xFF9FCAFF)
@@ -59,7 +58,6 @@ private val darkOutline = Color(0xFF8D9199)
 private val darkInverseOnSurface = Color(0xFF1A1C1E)
 private val darkInverseSurface = Color(0xFFE2E2E6)
 private val darkInversePrimary = Color(0xFF0861A4)
-private val darkShadow = Color(0xFF000000)
 private val darkSurfaceTint = Color(0xFF9FCAFF)
 
 val NotiLightColorScheme = lightColorScheme(

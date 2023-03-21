@@ -2,6 +2,8 @@ package org.skyfaced.noti.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -32,5 +34,19 @@ fun NotiTheme(
         typography = NotiTypography,
         shapes = NotiShapes,
         content = content,
+    )
+}
+
+/** @see <a href="https://stackoverflow.com/a/69784868/9846834">Class source code</a> */
+object ClearRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor(): Color = Color.Transparent
+
+    @Composable
+    override fun rippleAlpha() = RippleAlpha(
+        draggedAlpha = 0.0f,
+        focusedAlpha = 0.0f,
+        hoveredAlpha = 0.0f,
+        pressedAlpha = 0.0f,
     )
 }

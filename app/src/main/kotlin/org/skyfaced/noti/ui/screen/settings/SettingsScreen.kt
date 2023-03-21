@@ -28,8 +28,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,7 +43,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -60,6 +57,7 @@ import org.skyfaced.noti.BuildConfig
 import org.skyfaced.noti.R
 import org.skyfaced.noti.settings.NotiLocale
 import org.skyfaced.noti.settings.NotiTheme
+import org.skyfaced.noti.ui.theme.ClearRippleTheme
 import org.skyfaced.noti.ui.util.ConfirmationData
 import org.skyfaced.noti.ui.util.ConfirmationDialog
 import org.skyfaced.noti.ui.util.VerticalDivider
@@ -458,13 +456,6 @@ private fun Dialogs(
     }
 }
 
-data class ToggleButtonData(
-    @DrawableRes
-    val icon: Int,
-    @StringRes
-    val text: Int
-)
-
 data class ExternalLinkData(
     @DrawableRes
     val icon: Int,
@@ -472,17 +463,3 @@ data class ExternalLinkData(
     val contentDescription: Int,
     val link: String,
 )
-
-/** @see <a href="https://stackoverflow.com/a/69784868/9846834">Class source code</a> */
-object ClearRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor(): Color = Color.Transparent
-
-    @Composable
-    override fun rippleAlpha() = RippleAlpha(
-        draggedAlpha = 0.0f,
-        focusedAlpha = 0.0f,
-        hoveredAlpha = 0.0f,
-        pressedAlpha = 0.0f,
-    )
-}

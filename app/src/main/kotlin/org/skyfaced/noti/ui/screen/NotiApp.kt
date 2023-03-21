@@ -139,6 +139,7 @@ fun NotiApp() {
 
         val navBackStackEntry = navHostController.currentBackStackEntryAsState().value
 
+        @Suppress("MoveVariableDeclarationIntoWhen")
         val theme = settings.theme.observe.collectAsStateWithLifecycle(NotiTheme.System).value
         val darkTheme = when (theme) {
             NotiTheme.Light -> false

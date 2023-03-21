@@ -98,9 +98,9 @@ private fun HomeScreen(
 
     val screenState = when {
         state.isLoading -> ScreenState.Loading
-        !state.isLoading && state.notes != null && state.notes.isNotEmpty() -> ScreenState.Success
-        !state.isLoading && state.notes != null && state.notes.isEmpty() -> ScreenState.Empty
-        !state.isLoading && state.uiMessage != null && state.uiMessage.cause is FlowException -> ScreenState.Failure
+        state.notes != null && state.notes.isNotEmpty() -> ScreenState.Success
+        state.notes != null -> ScreenState.Empty
+        state.uiMessage != null && state.uiMessage.cause is FlowException -> ScreenState.Failure
         else -> ScreenState.Unknown
     }
 
