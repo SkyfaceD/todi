@@ -13,7 +13,7 @@ object config {
 
         private const val major = 1
         private const val minor = 0
-        private const val patch = 0
+        private const val patch = 1
 
         val code = (major * 10000 + minor * 100 + patch).apply { require(this < VERSION_CODE_MAX) }
         const val name = "$major.$minor.$patch"
