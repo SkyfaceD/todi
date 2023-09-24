@@ -11,7 +11,7 @@ fun Project.getLocalProperty(key: String, file: String = "local.properties"): St
             .use { reader ->
                 properties.load(reader)
             }
-    } else error("File from not found")
+    } else error("File not found")
 
     return properties.getProperty(key)
 }
