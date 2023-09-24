@@ -112,9 +112,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.2")
 
     // Database
-    implementation("androidx.room:room-runtime:2.5.0")
-    implementation("androidx.room:room-ktx:2.5.0")
-    ksp("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-runtime:2.5.2")
+    implementation("androidx.room:room-ktx:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
 
     // Util
     implementation("com.squareup.logcat:logcat:0.1")
