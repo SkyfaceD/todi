@@ -26,13 +26,6 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
-
-        bundle {
-            language {
-                enableSplit = false
-            }
-        }
-        resourceConfigurations.addAll(listOf("en", "ru"))
     }
 
     signingConfigs {
