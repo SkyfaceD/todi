@@ -15,9 +15,7 @@
 <a href='https://appgallery.huawei.com/app/C106876647'><img alt='Get it on App Gallery' src='.github/screenshots/app_gallery.png' width='175' height='50'/></a>
 <a href='https://www.amazon.com/dp/B0B9NZ9X1G/ref=sr_1_2?crid=E70Z7LWY9ULN&keywords=noti+app&qid=1661438584&sprefix=noti+ap%2Caps%2C252&sr=8-2'><img alt='Get it on Amazon Appstore' src='.github/screenshots/amazon_appstore.png' width='175' height='50'/></a>
 
-or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>releases section</a>
-
-or try a demo on <a href='https://wolfia.com/magic-link/762f2be2-d412-463e-828f-bef732912a4c'>wolfia</a> (Authentication required).
+or find it out on <a href='https://github.com/SkyfaceD/noti/releases'>github releases section</a>
 
 # Stack
 
