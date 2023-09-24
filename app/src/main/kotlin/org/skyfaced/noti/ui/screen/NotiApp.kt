@@ -1,8 +1,6 @@
 package org.skyfaced.noti.ui.screen
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SizeTransform
@@ -10,8 +8,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -37,7 +33,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,11 +43,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -69,6 +62,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import cafe.adriel.lyricist.LocalStrings
+import cafe.adriel.lyricist.rememberStrings
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import logcat.logcat
 import org.skyfaced.noti.BuildConfig
@@ -77,6 +72,7 @@ import org.skyfaced.noti.database.NotiDatabaseImpl
 import org.skyfaced.noti.settings.NotiLocale
 import org.skyfaced.noti.settings.NotiSettingsImpl
 import org.skyfaced.noti.settings.NotiTheme
+import org.skyfaced.noti.settings.locale.strings
 import org.skyfaced.noti.ui.screen.details.DetailsRepositoryImpl
 import org.skyfaced.noti.ui.screen.details.DetailsScreen
 import org.skyfaced.noti.ui.screen.details.DetailsViewModel
@@ -113,6 +109,7 @@ fun NotiApp() {
 
     val systemUiController = rememberSystemUiController()
     val navHostController = rememberNavController()
+    val lyricist = rememberStrings()
 
     DisposableEffect(lifecycleOwner) {
         val listener = NavController.OnDestinationChangedListener { _, dest, args ->
@@ -130,10 +127,11 @@ fun NotiApp() {
         LocalNotiSettings provides settings,
         LocalNotiDatabase provides database,
         LocalNotiNotifications provides notifications,
-        LocalNotiExtendedFloatingActionButton provides fab
+        LocalNotiExtendedFloatingActionButton provides fab,
+        LocalStrings provides lyricist.strings
     ) {
         val locale = settings.locale.observe.collectAsStateWithLifecycle(NotiLocale.English).value
-        setLocale(locale)
+        lyricist.languageTag = locale.tag
 
         val navBackStackEntry = navHostController.currentBackStackEntryAsState().value
 
@@ -191,7 +189,6 @@ fun NotiApp() {
                 topBar = {
                     NotiTopBar(
                         navBackStackEntry = navBackStackEntry,
-                        locale = locale,
                         navigateUp = navHostController::navigateUp,
                         openSettings = {
                             notifications.hideSnackbar()
@@ -253,10 +250,10 @@ private fun NotiFloatingActionButton(
             icon = {
                 Icon(
                     painterResource(R.drawable.ic_add_task),
-                    stringResource(R.string.cd_add_note)
+                    strings.cd_add_note
                 )
             },
-            text = { Text(stringResource(R.string.lbl_add_note)) },
+            text = { Text(strings.lbl_add_note) },
             enabled = enabled,
             expanded = fab.expanded.value,
             shape = MaterialTheme.shapes.extraLarge
@@ -269,7 +266,6 @@ private fun NotiFloatingActionButton(
 @Composable
 private fun NotiTopBar(
     navBackStackEntry: NavBackStackEntry?,
-    locale: NotiLocale,
     navigateUp: () -> Unit,
     openSettings: () -> Unit,
 ) {
@@ -290,7 +286,7 @@ private fun NotiTopBar(
             ) {
                 Icon(
                     painterResource(R.drawable.ic_back),
-                    stringResource(R.string.cd_back)
+                    strings.cd_back
                 )
             }
         },
@@ -298,57 +294,44 @@ private fun NotiTopBar(
             val duration = 500
 
             AnimatedContent(
-                targetState = locale,
+                targetState = navBackStackEntry,
                 transitionSpec = {
-                    val enter = scaleIn(tween(duration)) + fadeIn(tween(duration))
-                    val exit = scaleOut(tween(duration)) + fadeOut(tween(duration))
+                    val direction =
+                        if (targetState?.destination?.route == Screens.Home.route) 1 else -1
 
-                    enter togetherWith exit
-                },
-                label = "languageAnimation"
-            ) {
-                AnimatedContent(
-                    targetState = navBackStackEntry,
-                    transitionSpec = {
-                        val direction =
-                            if (targetState?.destination?.route == Screens.Home.route) 1 else -1
-
-                        val enter = slideInVertically(tween(duration)) { direction * it } + fadeIn(
+                    val enter = slideInVertically(tween(duration)) { direction * it } + fadeIn(
+                        tween(duration)
+                    )
+                    val exit =
+                        slideOutVertically(tween(duration)) { direction * -it } + fadeOut(
                             tween(duration)
                         )
-                        val exit =
-                            slideOutVertically(tween(duration)) { direction * -it } + fadeOut(
-                                tween(duration)
-                            )
 
-                        (enter togetherWith exit).using(SizeTransform(clip = true))
-                    },
-                    label = "toolbarAnimation"
-                ) { targetValue ->
-                    val title = when (targetValue?.destination?.route) {
-                        Screens.Home.route -> BuildConfig.APP_NAME
-                        Screens.Details.route -> {
-                            val mode =
-                                Mode.valueOf(targetValue.arguments?.getString("mode").orEmpty())
-                            stringResource(
-                                when (mode) {
-                                    Mode.Edit -> R.string.lbl_editing
-                                    Mode.Create -> R.string.lbl_creating
-                                }
-                            )
+                    (enter togetherWith exit).using(SizeTransform(clip = true))
+                },
+                label = "toolbarAnimation"
+            ) { targetValue ->
+                val title = when (targetValue?.destination?.route) {
+                    Screens.Home.route -> BuildConfig.APP_NAME
+                    Screens.Details.route -> {
+                        val mode = targetValue.arguments?.getString("mode").orEmpty()
+                        when (Mode.valueOf(mode)) {
+                            Mode.Edit -> strings.lbl_editing
+                            Mode.Create -> strings.lbl_creating
                         }
-                        Screens.Settings.route -> stringResource(R.string.lbl_settings)
-                        else -> ""
                     }
 
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                        text = title,
-                        textAlign = TextAlign.Center,
-                    )
+                    Screens.Settings.route -> strings.lbl_settings
+                    else -> ""
                 }
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    text = title,
+                    textAlign = TextAlign.Center,
+                )
             }
         },
         actions = {
@@ -364,7 +347,7 @@ private fun NotiTopBar(
             ) {
                 Icon(
                     painterResource(R.drawable.ic_settings),
-                    stringResource(R.string.cd_settings)
+                    strings.cd_settings
                 )
             }
         }
@@ -393,7 +376,7 @@ private fun NotiNavHost(
                             throw IllegalArgumentException("Unknown ViewModel class")
                         }
 
-                        val repository = HomeRepositoryImpl(database.noteDao)
+                        val repository = HomeRepositoryImpl(database.noteDao, settings)
                         return HomeViewModel(settings, repository) as T
                     }
                 }
@@ -424,7 +407,7 @@ private fun NotiNavHost(
                             throw IllegalArgumentException("Unknown ViewModel class")
                         }
 
-                        val repository = DetailsRepositoryImpl(database.noteDao)
+                        val repository = DetailsRepositoryImpl(database.noteDao, settings)
                         return DetailsViewModel(repository, handle) as T
                     }
                 }
@@ -450,33 +433,4 @@ private fun NotiNavHost(
             SettingsScreen(viewModel = viewModel)
         }
     }
-}
-
-/**
- * Experimental function
- */
-@Suppress("DEPRECATION", "unused")
-fun setLocale(
-    context: Context,
-    configuration: Configuration,
-    locale: NotiLocale,
-) {
-    val javaLocale = Locale(locale.tag)
-    configuration.setLocale(javaLocale)
-    context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
-}
-
-/**
- * Experimental function
- */
-@SuppressLint("ComposableNaming")
-@Suppress("DEPRECATION")
-@Composable
-@ReadOnlyComposable
-private fun setLocale(locale: NotiLocale) {
-    val javaLocale = Locale(locale.tag)
-    val configuration = LocalConfiguration.current
-    val context = LocalContext.current
-    configuration.setLocale(javaLocale)
-    context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
 }

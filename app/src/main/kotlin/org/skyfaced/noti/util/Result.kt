@@ -1,5 +1,7 @@
 package org.skyfaced.noti.util
 
+import org.skyfaced.noti.settings.NotiLocale
+import org.skyfaced.noti.settings.Settings
 import org.skyfaced.noti.util.exception.ResourceException
 import org.skyfaced.noti.util.exception.UnexpectedException
 import kotlin.contracts.ExperimentalContracts
@@ -13,12 +15,14 @@ sealed class Result<out T> {
 }
 
 interface ResultScope<T> {
+    val locale: Settings<NotiLocale>
+
     fun success(data: T): Result<T>
 
     fun failure(cause: ResourceException): Result<T>
 }
 
-class ResultScopeImpl<T> : ResultScope<T> {
+class ResultScopeImpl<T>(override val locale: Settings<NotiLocale>) : ResultScope<T> {
     override fun success(data: T): Result<T> {
         return Result.Success(data)
     }
@@ -28,11 +32,14 @@ class ResultScopeImpl<T> : ResultScope<T> {
     }
 }
 
-inline fun <T> result(action: ResultScope<T>.() -> Result<T>): Result<T> {
+inline fun <T> result(
+    locale: Settings<NotiLocale>,
+    action: ResultScope<T>.() -> Result<T>
+): Result<T> {
     return try {
-        with(ResultScopeImpl(), action)
+        with(ResultScopeImpl(locale), action)
     } catch (e: Exception) {
-        Result.Failure(UnexpectedException())
+        Result.Failure(UnexpectedException(locale))
     }
 }
 

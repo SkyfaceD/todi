@@ -27,13 +27,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.launch
-import org.skyfaced.noti.R
+import org.skyfaced.noti.settings.locale.strings
 
 @Composable
 fun ConfirmationDialog(
@@ -45,7 +43,6 @@ fun ConfirmationDialog(
     immediatelyConfirm: Boolean = true,
     properties: DialogProperties = DialogProperties(),
 ) {
-    val context = LocalContext.current
     val snackbarHostState = SnackbarHostState()
     val scope = rememberCoroutineScope()
 
@@ -104,21 +101,23 @@ fun ConfirmationDialog(
                             .align(Alignment.End)
                             .padding(ButtonPadding)
                     ) {
-                        TextButton(onDismissRequest) { Text(stringResource(R.string.lbl_cancel)) }
+                        TextButton(onDismissRequest) { Text(strings.lbl_cancel) }
                         if (!immediatelyConfirm) {
                             Spacer(modifier = Modifier.width(8.dp))
+
+                            val selectOneItem = strings.msg_select_one_item
                             TextButton(
                                 onClick = {
                                     if (selectedPos != null && selectedItem != null) {
                                         onConfirm(selectedPos!!, selectedItem!!)
                                     } else {
                                         scope.launch {
-                                            snackbarHostState.showSnackbar(context.getString(R.string.msg_select_one_item))
+                                            snackbarHostState.showSnackbar(selectOneItem)
                                         }
                                     }
                                 }
                             ) {
-                                Text(stringResource(R.string.lbl_ok))
+                                Text(strings.lbl_ok)
                             }
                         }
                     }

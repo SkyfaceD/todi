@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import org.skyfaced.noti.R
 import org.skyfaced.noti.settings.NotiSettings
+import org.skyfaced.noti.settings.strings
 import org.skyfaced.noti.ui.model.note.Note
 import org.skyfaced.noti.util.UiMessage
 import org.skyfaced.noti.util.UiMessageManager
@@ -46,7 +46,8 @@ class HomeViewModel(
         viewModelScope.launch {
             homeRepository.deleteNote(note)
                 .onSuccess {
-                    uiMessageManager.emitMessage(UiMessage(R.string.msg_note_deleted).withData(note))
+                    val uiMessage = UiMessage(settings.locale.strings.msg_note_deleted)
+                    uiMessageManager.emitMessage(uiMessage.withData(note))
                 }
                 .onFailure { uiMessageManager.emitMessage(UiMessage(it)) }
         }
@@ -82,7 +83,7 @@ class HomeViewModel(
             homeRepository.notesFlow
                 .onStart { state = state.copy(isLoading = true) }
                 .catch {
-                    uiMessageManager.emitMessage(UiMessage(FlowException()))
+                    uiMessageManager.emitMessage(UiMessage(FlowException(settings.locale)))
                     state = state.copy(isLoading = false)
                 }
                 .collect { state = state.copy(isLoading = false, notes = it) }

@@ -15,12 +15,11 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.skyfaced.noti.R
+import org.skyfaced.noti.settings.locale.strings
 import org.skyfaced.noti.ui.util.NotiButton
 import org.skyfaced.noti.ui.util.NotiTextField
 import org.skyfaced.noti.util.LocalNotiNavigation
@@ -67,9 +66,8 @@ private fun DetailsScreen(
     }
 
     state.uiMessage?.let { uiMessage ->
-        val text = stringResource(uiMessage.messageRes)
         LaunchedEffect(uiMessage) {
-            notifications.showSnackbar(text)
+            notifications.showSnackbar(uiMessage.message.orEmpty())
             onMessageShown(uiMessage.id)
         }
     }
@@ -84,7 +82,7 @@ private fun DetailsScreen(
                 .focusRequester(focusRequester),
             value = state.note?.title.orEmpty(),
             onValueChange = onTitleChange,
-            label = { Text(stringResource(R.string.lbl_title)) },
+            label = { Text(strings.lbl_title) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next,
@@ -101,16 +99,16 @@ private fun DetailsScreen(
                 .weight(1f),
             value = state.note?.description.orEmpty(),
             onValueChange = onDescriptionChange,
-            label = { Text(stringResource(R.string.lbl_description)) },
+            label = { Text(strings.lbl_description) },
         )
 
         val text = when (mode) {
-            Mode.Edit -> R.string.lbl_save
-            Mode.Create -> R.string.lbl_add
+            Mode.Edit -> strings.lbl_save
+            Mode.Create -> strings.lbl_add
         }
         NotiButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(text),
+            text = text,
             onClick = onButtonClick
         )
     }

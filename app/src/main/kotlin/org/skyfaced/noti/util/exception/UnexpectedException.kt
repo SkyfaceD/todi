@@ -1,7 +1,9 @@
 package org.skyfaced.noti.util.exception
 
-import org.skyfaced.noti.R
+import org.skyfaced.noti.settings.NotiLocale
+import org.skyfaced.noti.settings.Settings
+import org.skyfaced.noti.settings.strings
 
 class UnexpectedException(
-    message: String? = null,
-) : ResourceException(R.string.msg_unexpected_exception, message)
+    locale: Settings<NotiLocale>
+) : ResourceException(locale.strings.msg_unexpected_exception)

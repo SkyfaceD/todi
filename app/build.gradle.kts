@@ -118,6 +118,8 @@ dependencies {
     // UI
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+    implementation("cafe.adriel.lyricist:lyricist:1.4.2")
+    ksp("cafe.adriel.lyricist:lyricist-processor:1.4.2")
 
     // Compose
     implementation("androidx.compose.ui:ui:1.5.1")
