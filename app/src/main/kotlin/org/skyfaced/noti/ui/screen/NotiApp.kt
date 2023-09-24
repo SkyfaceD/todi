@@ -59,6 +59,7 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -91,14 +92,12 @@ import org.skyfaced.noti.util.LocalNotiNavigation
 import org.skyfaced.noti.util.LocalNotiNotifications
 import org.skyfaced.noti.util.LocalNotiSettings
 import org.skyfaced.noti.util.Mode
-import org.skyfaced.noti.util.collectAsStateWithLifecycle
 import org.skyfaced.noti.util.fab.NotiExtendedFloatingActionButton
 import org.skyfaced.noti.util.fab.NotiExtendedFloatingActionButtonImpl
 import org.skyfaced.noti.util.notifcations.NotiNotificationsImpl
 import java.util.*
 import kotlin.math.abs
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotiApp() {
     val context = LocalContext.current

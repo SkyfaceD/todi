@@ -51,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.skyfaced.noti.BuildConfig
 import org.skyfaced.noti.R
@@ -60,7 +61,6 @@ import org.skyfaced.noti.ui.theme.ClearRippleTheme
 import org.skyfaced.noti.ui.util.ConfirmationData
 import org.skyfaced.noti.ui.util.ConfirmationDialog
 import org.skyfaced.noti.ui.util.VerticalDivider
-import org.skyfaced.noti.util.collectAsStateWithLifecycle
 import kotlin.math.roundToInt
 
 @Composable
@@ -69,7 +69,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
 
-    val state = viewModel.state.collectAsStateWithLifecycle(initial = null).value
+    val state = viewModel.state.collectAsStateWithLifecycle(null).value
 
     state?.let {
         SettingsScreen(
