@@ -2,10 +2,12 @@
 <resources>
     <string name="cd_4pda">Перейти на 4PDA страницу</string>
     <string name="cd_add_note">Перейти в создание заметки</string>
+    <string name="cd_amazon">Перейти на страницу Amazon Appstore</string>
     <string name="cd_back">Назад</string>
     <string name="cd_delete">Удалить</string>
-    <string name="cd_github">Перейти на Github страницу</string>
-    <string name="cd_google_play">Перейти на Google Play страницу</string>
+    <string name="cd_github">Перейти на страницу Github</string>
+    <string name="cd_google_play">Перейти на страницу Google Play</string>
+    <string name="cd_huawei">Перейти на страницу App Gallery</string>
     <string name="cd_settings">Перейти в настройки</string>
 
     <string name="lbl_about_app">О программе</string>

@@ -402,8 +402,9 @@ private fun Dialogs(
     if (aboutDialog.value) {
         //@formatter:off
         val items = listOf(
-//            ExternalLinkData(R.drawable.ic_4pda, R.string.cd_4pda, "https://4pda.to/"),
-//            ExternalLinkData(R.drawable.ic_google_play, R.string.cd_google_play, "https://play.google.com/store/apps"),
+            ExternalLinkData(R.drawable.ic_google_play, R.string.cd_google_play, "https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=web_share"),
+            ExternalLinkData(R.drawable.ic_huawei, R.string.cd_huawei, "https://appgallery.huawei.com/app/C106876647"),
+            ExternalLinkData(R.drawable.ic_amazon, R.string.cd_amazon, "https://www.amazon.com/dp/B0B9NZ9X1G/ref=sr_1_2?crid=E70Z7LWY9ULN&keywords=noti+app&qid=1661438584&sprefix=noti+ap%2Caps%2C252&sr=8-2"),
             ExternalLinkData(R.drawable.ic_github, R.string.cd_github, "https://github.com/SkyfaceD/noti"),
         )
         //@formatter:on
