@@ -51,10 +51,10 @@ or try a demo on <a href='https://wolfia.com/magic-link/762f2be2-d412-463e-828f-
 # Build
 
 ### Requirements
-- Android Studio Chipmunk | 2021.2.1+
+- Android Studio Hedgehog | 2023.1.1 Beta 5
 - Android SDK 21+
-- Gradle 7.5+
-- Java 11+
+- Gradle 8.2
+- Java 17
 
 # Support
 
