@@ -6,14 +6,14 @@ plugins {
 
 @Suppress("UnstableApiUsage")
 android {
-    namespace = "org.skyfaced.noti"
+    namespace = config.namespace
 
-    compileSdk = 33
+    compileSdk = config.compileSdk
 
     defaultConfig {
-        applicationId = "org.skyfaced.noti"
-        minSdk = 21
-        targetSdk = 33
+        applicationId = config.applicationId
+        minSdk = config.minSdk
+        targetSdk = config.targetSdk
         versionCode = config.version.code
         versionName = config.version.name
 
@@ -74,7 +74,7 @@ android {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
     }
 
@@ -84,6 +84,11 @@ android {
                 kotlin.srcDir("build/generated/ksp/${name}/kotlin")
             }
         }
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
     }
 }
 
