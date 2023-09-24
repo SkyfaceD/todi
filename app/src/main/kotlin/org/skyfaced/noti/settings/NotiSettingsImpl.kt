@@ -24,11 +24,10 @@ class NotiSettingsImpl(
         private val Context.store: DataStore<Preferences> by preferencesDataStore("noti.settings")
 
         private val Theme = stringPreferencesKey("theme")
-        private val DynamicColor = booleanPreferencesKey("dynamic_color")
+        private val DynamicColor = booleanPreferencesKey("dynamicColor")
         private val AMOLED = booleanPreferencesKey("amoled")
         private val Locale = intPreferencesKey("locale")
         private val GridCells = intPreferencesKey("gridCells")
-        private val DescriptionMaxLines = intPreferencesKey("descriptionMaxLines")
     }
 
     override val theme: Settings<NotiTheme> = object : Settings<NotiTheme> {
@@ -112,20 +111,6 @@ class NotiSettingsImpl(
             super.update(newState)
             context.store.edit { preferences ->
                 preferences[GridCells] = newState
-            }
-        }
-    }
-
-    override val descriptionMaxLines: Settings<Int> = object : Settings<Int> {
-        override val observe: Flow<Int>
-            get() = context.store.data
-                .catchIO()
-                .map { preferences -> preferences[DescriptionMaxLines] ?: 3 }
-
-        override suspend fun update(newState: Int) {
-            super.update(newState)
-            context.store.edit { preferences ->
-                preferences[DescriptionMaxLines] = newState
             }
         }
     }

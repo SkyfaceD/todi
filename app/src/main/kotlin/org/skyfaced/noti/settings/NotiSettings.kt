@@ -6,5 +6,4 @@ interface NotiSettings {
     val amoled: Settings<Boolean>
     val locale: Settings<NotiLocale>
     val gridCells: Settings<Int>
-    val descriptionMaxLines: Settings<Int>
 }
