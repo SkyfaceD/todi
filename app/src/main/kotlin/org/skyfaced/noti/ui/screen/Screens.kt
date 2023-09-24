@@ -3,13 +3,13 @@ package org.skyfaced.noti.ui.screen
 import org.skyfaced.noti.util.Mode
 
 sealed class Screens(val route: String) {
-    object Home : Screens("home")
+    data object Home : Screens("home")
 
-    object Details : Screens("home/details/{mode}?id={id}") {
+    data object Details : Screens("home/details/{mode}?id={id}") {
         fun argRoute(mode: Mode, id: Long? = null): String {
             return "home/details/${mode.name}?id=$id"
         }
     }
 
-    object Settings : Screens("home/settings")
+    data object Settings : Screens("home/settings")
 }

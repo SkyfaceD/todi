@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -17,7 +16,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -51,7 +50,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -219,9 +217,6 @@ fun NotiApp() {
                     )
                 },
                 snackbarHost = {
-                    val v20px = with(LocalDensity.current) { 20.toDp() }
-                    logcat("Asd") { "Random $v20px" }
-
                     SnackbarHost(
                         hostState = notifications.snackbarHostState,
                         snackbar = {
@@ -269,7 +264,8 @@ private fun NotiFloatingActionButton(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedContentLambdaTargetStateParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NotiTopBar(
     navBackStackEntry: NavBackStackEntry?,
@@ -283,7 +279,8 @@ private fun NotiTopBar(
             val enabled = navBackStackEntry?.destination?.route == Screens.Settings.route ||
                     navBackStackEntry?.destination?.route == Screens.Details.route
             val alpha by animateFloatAsState(
-                targetValue = if (enabled) 1f else 0f
+                targetValue = if (enabled) 1f else 0f,
+                label = "alphaAnimation"
             )
 
             IconButton(
@@ -306,8 +303,9 @@ private fun NotiTopBar(
                     val enter = scaleIn(tween(duration)) + fadeIn(tween(duration))
                     val exit = scaleOut(tween(duration)) + fadeOut(tween(duration))
 
-                    enter with exit
-                }
+                    enter togetherWith exit
+                },
+                label = "languageAnimation"
             ) {
                 AnimatedContent(
                     targetState = navBackStackEntry,
@@ -323,8 +321,9 @@ private fun NotiTopBar(
                                 tween(duration)
                             )
 
-                        (enter with exit).using(SizeTransform(clip = true))
-                    }
+                        (enter togetherWith exit).using(SizeTransform(clip = true))
+                    },
+                    label = "toolbarAnimation"
                 ) { targetValue ->
                     val title = when (targetValue?.destination?.route) {
                         Screens.Home.route -> stringResource(R.string.lbl_app_name).uppercase()
@@ -354,7 +353,8 @@ private fun NotiTopBar(
         },
         actions = {
             val alpha by animateFloatAsState(
-                targetValue = if (navBackStackEntry?.destination?.route == Screens.Home.route) 1f else 0f
+                targetValue = if (navBackStackEntry?.destination?.route == Screens.Home.route) 1f else 0f,
+                label = "alphaAnimation"
             )
 
             IconButton(

@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -88,7 +87,6 @@ fun SettingsScreen(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun SettingsScreen(
     state: SettingsUiState,
@@ -362,7 +360,7 @@ private fun Dialogs(
             onDismissRequest = { themeDialog.value = false },
             onConfirm = { pos, _ ->
                 themeDialog.value = false
-                onThemeChange(NotiTheme.values()[pos])
+                onThemeChange(NotiTheme.entries[pos])
             }
         )
     }

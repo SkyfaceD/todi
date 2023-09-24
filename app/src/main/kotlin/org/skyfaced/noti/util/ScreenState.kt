@@ -1,13 +1,13 @@
 package org.skyfaced.noti.util
 
 sealed class ScreenState {
-    object Loading : ScreenState()
+    data object Loading : ScreenState()
 
-    object Success : ScreenState()
+    data object Success : ScreenState()
 
-    object Empty : ScreenState()
+    data object Empty : ScreenState()
 
-    object Failure : ScreenState()
+    data object Failure : ScreenState()
 
-    object Unknown : ScreenState()
+    data object Unknown : ScreenState()
 }

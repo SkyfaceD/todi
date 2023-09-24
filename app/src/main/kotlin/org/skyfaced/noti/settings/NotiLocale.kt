@@ -19,7 +19,7 @@ enum class NotiLocale(
             else -> throw EnumInferenceException("Can't define locale by passed tag: $tag")
         }
 
-        fun from(ordinal: Int) = values().getOrNull(ordinal)
+        fun from(ordinal: Int) = entries.getOrNull(ordinal)
             ?: throw EnumInferenceException("Can't define locale by passed ordinal: $ordinal")
     }
 }

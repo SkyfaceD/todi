@@ -19,7 +19,6 @@
     <string name="lbl_description">Описание</string>
     <string name="lbl_dynamic_theme">Динамическая тема</string>
     <string name="lbl_dynamic_theme_summary">Применяет тему приложения, основанную на цветовой палитре обоев устройства</string>
-    <string name="lbl_edit">Изменить</string>
     <string name="lbl_editing">Редактирование</string>
     <string name="lbl_external_links">Внешние ссылки</string>
     <string name="lbl_language">Язык</string>

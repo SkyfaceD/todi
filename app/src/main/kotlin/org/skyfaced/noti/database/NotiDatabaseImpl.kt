@@ -15,9 +15,9 @@ class NotiDatabaseImpl(
         "noti.database"
     )
         .setQueryCallback(object : RoomDatabase.QueryCallback {
-            override fun onQuery(query: String, args: List<Any?>) {
+            override fun onQuery(sqlQuery: String, bindArgs: List<Any?>) {
                 logcat(tag = "Database") {
-                    "\nQuery: $query" + if (args.isNotEmpty()) ";\nArgs: $args" else ""
+                    "\nQuery: $sqlQuery" + if (bindArgs.isNotEmpty()) ";\nArgs: $bindArgs" else ""
                 }
             }
         }, Executors.newSingleThreadExecutor())

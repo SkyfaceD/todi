@@ -17,7 +17,6 @@ interface Settings<T> {
     suspend operator fun invoke(newState: T) = update(newState = newState)
 }
 
-@Suppress("BlockingMethodInNonBlockingContext")
 suspend fun <T> Settings<T>.blockingFirst(): T {
     return withContext(Dispatchers.IO) {
         return@withContext runBlocking {

@@ -20,7 +20,6 @@
     <string name="lbl_description">Description</string>
     <string name="lbl_dynamic_theme">Dynamic theme</string>
     <string name="lbl_dynamic_theme_summary">Applies a theme created on the color scheme of your wallpaper</string>
-    <string name="lbl_edit">Edit</string>
     <string name="lbl_editing">Editing</string>
     <string name="lbl_external_links">External links</string>
     <string name="lbl_language">Language</string>

@@ -98,13 +98,13 @@ private fun HomeScreen(
 
     val screenState = when {
         state.isLoading -> ScreenState.Loading
-        state.notes != null && state.notes.isNotEmpty() -> ScreenState.Success
+        !state.notes.isNullOrEmpty() -> ScreenState.Success
         state.notes != null -> ScreenState.Empty
         state.uiMessage != null && state.uiMessage.cause is FlowException -> ScreenState.Failure
         else -> ScreenState.Unknown
     }
 
-    Crossfade(targetState = screenState) { targetValue ->
+    Crossfade(targetState = screenState, label = "crossfadeAnimation") { targetValue ->
         when (targetValue) {
             ScreenState.Empty -> {
                 Column(
