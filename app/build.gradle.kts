@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     id("com.android.application")
     id("com.google.devtools.ksp")
@@ -34,7 +36,7 @@ android {
     }
 
     signingConfigs {
-        create("release") {
+        create(config.variant.release.name) {
             keyAlias = getLocalProperty("alias")
             keyPassword = getLocalProperty("key")
             storeFile = file(getLocalProperty("path"))
@@ -43,13 +45,19 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
+        getByName(config.variant.debug.name) {
+            buildConfigField("String", "APP_NAME", config.variant.debug.applicationName.escaped())
+            archivesName = "${config.variant.defaultAppNameLowercase}-${config.version.name}"
+
             isDebuggable = true
-            versionNameSuffix = "-dev"
-            applicationIdSuffix = ".dev"
+            versionNameSuffix = config.variant.debug.versionNameSuffix
+            applicationIdSuffix = config.variant.debug.applicationIdSuffix
         }
 
-        getByName("release") {
+        getByName(config.variant.release.name) {
+            buildConfigField("String", "APP_NAME", config.variant.release.applicationName.escaped())
+            archivesName = "${config.variant.defaultAppNameLowercase}-${config.version.name}"
+
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
@@ -84,6 +92,14 @@ android {
                 kotlin.srcDir("build/generated/ksp/${name}/kotlin")
             }
         }
+
+        val applicationName = when (buildType.name) {
+            config.variant.debug.name -> config.variant.debug.applicationName
+            config.variant.release.name -> config.variant.release.applicationName
+            else -> throw IllegalArgumentException("Unrecognized build type: ${buildType.name}")
+        }
+
+        mergedFlavor.manifestPlaceholders[config.variant.appNameKey] = applicationName
     }
 
     buildFeatures {

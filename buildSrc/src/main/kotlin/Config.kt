@@ -18,4 +18,26 @@ object config {
         val code = (major * 10000 + minor * 100 + patch).apply { require(this < VERSION_CODE_MAX) }
         const val name = "$major.$minor.$patch"
     }
+
+    sealed class variant(
+        val name: String,
+        val versionNameSuffix: String = "",
+        val applicationIdSuffix: String = "",
+        val applicationName: String = defaultAppName,
+    ) {
+        object debug : variant("debug", "-dev", ".dev", "NOTI Dev")
+
+        object release : variant("release")
+
+        companion object {
+            const val appNameKey = "appNameKey"
+            const val defaultAppName = "NOTI"
+            const val defaultAppNameLowercase = "noti"
+
+            /**
+             * Don't forget to add each new variant
+             */
+            val all by lazy(LazyThreadSafetyMode.NONE) { listOf(debug, release) }
+        }
+    }
 }

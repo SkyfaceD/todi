@@ -71,6 +71,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import logcat.logcat
+import org.skyfaced.noti.BuildConfig
 import org.skyfaced.noti.R
 import org.skyfaced.noti.database.NotiDatabaseImpl
 import org.skyfaced.noti.settings.NotiLocale
@@ -325,7 +326,7 @@ private fun NotiTopBar(
                     label = "toolbarAnimation"
                 ) { targetValue ->
                     val title = when (targetValue?.destination?.route) {
-                        Screens.Home.route -> stringResource(R.string.lbl_app_name).uppercase()
+                        Screens.Home.route -> BuildConfig.APP_NAME
                         Screens.Details.route -> {
                             val mode =
                                 Mode.valueOf(targetValue.arguments?.getString("mode").orEmpty())

@@ -415,7 +415,7 @@ private fun Dialogs(
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = stringResource(R.string.lbl_app_name).uppercase(),
+                        text = BuildConfig.APP_NAME,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
