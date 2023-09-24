@@ -69,11 +69,9 @@ class HomeViewModel(
         viewModelScope.launch {
             combine(
                 settings.gridCells.observe,
-                settings.descriptionMaxLines.observe
-            ) { gridCells, descriptionMaxLines ->
+            ) { (gridCells) ->
                 state = state.copy(
                     gridCells = gridCells,
-                    descriptionMaxLines = descriptionMaxLines
                 )
             }.collect { }
         }
