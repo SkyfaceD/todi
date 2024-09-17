@@ -1,5 +1,6 @@
 package org.skyfaced.noti.settings
 
+import cafe.adriel.lyricist.Strings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -24,3 +25,10 @@ suspend fun <T> Settings<T>.blockingFirst(): T {
         }
     }
 }
+
+fun <T> Settings<T>.syncedBlockingFirst(): T {
+    return runBlocking { observe.first() }
+}
+
+val Settings<NotiLocale>.strings
+    get() = Strings[syncedBlockingFirst().tag]!!

@@ -1,7 +1,9 @@
 package org.skyfaced.noti.util.exception
 
-import org.skyfaced.noti.R
+import org.skyfaced.noti.settings.NotiLocale
+import org.skyfaced.noti.settings.Settings
+import org.skyfaced.noti.settings.strings
 
 class NoteNotFound(
-    message: String? = null,
-) : ResourceException(R.string.msg_note_not_found, message)
+    locale: Settings<NotiLocale>
+) : ResourceException(locale.strings.msg_note_not_found)

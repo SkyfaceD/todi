@@ -32,13 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.skyfaced.noti.R
+import org.skyfaced.noti.settings.locale.strings
 import org.skyfaced.noti.ui.model.note.Note
 import org.skyfaced.noti.ui.screen.Screens
 import org.skyfaced.noti.util.ContentPadding
@@ -78,14 +77,15 @@ private fun HomeScreen(
     onMessageShown: (Long) -> Unit,
     onUndoClick: (Note) -> Unit,
 ) {
-    val context = LocalContext.current
     val notifications = LocalNotiNotifications.current
+
+    val undo = strings.lbl_undo
 
     state.uiMessage?.let { uiMessage ->
         LaunchedEffect(uiMessage) {
             notifications.showSnackbar(
-                message = context.getString(uiMessage.messageRes),
-                actionLabel = if (uiMessage.cause !is FlowException) context.getString(R.string.lbl_undo) else null,
+                message = uiMessage.message.orEmpty(),
+                actionLabel = if (uiMessage.cause !is FlowException) undo else null,
                 withDismissAction = true
             ).also {
                 if (it == SnackbarResult.ActionPerformed) {
@@ -117,7 +117,7 @@ private fun HomeScreen(
                         painter = painterResource(R.drawable.ic_note),
                         contentDescription = null
                     )
-                    Text(text = stringResource(R.string.msg_no_notes))
+                    Text(text = strings.msg_no_notes)
                 }
             }
             ScreenState.Failure -> {
@@ -131,10 +131,10 @@ private fun HomeScreen(
                         painter = painterResource(R.drawable.ic_error),
                         contentDescription = null
                     )
-                    val message = state.uiMessage?.messageRes ?: R.string.msg_unexpected_exception
-                    Text(text = stringResource(message))
+                    val message = state.uiMessage?.message ?: strings.msg_unexpected_exception
+                    Text(text = message)
                     Button(modifier = Modifier.widthIn(min = 100.dp), onClick = onRefresh) {
-                        Text(stringResource(R.string.lbl_try_again))
+                        Text(strings.lbl_try_again)
                     }
                 }
             }
@@ -217,7 +217,7 @@ private fun Item(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_close),
-                        contentDescription = stringResource(R.string.cd_delete)
+                        contentDescription = strings.cd_delete
                     )
                 }
             }

@@ -1,6 +1,5 @@
 package org.skyfaced.noti.util
 
-import androidx.annotation.StringRes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -10,12 +9,11 @@ import kotlinx.coroutines.sync.withLock
 import logcat.LogPriority
 import logcat.logcat
 import org.skyfaced.noti.util.exception.ResourceException
-import java.util.*
+import java.util.UUID
 
 /** @see <a href="https://github.com/chrisbanes/tivi/blob/main/common-ui-view/src/main/java/app/tivi/api/UiMessage.kt">Tivi sources</a> */
 data class UiMessage(
-    @StringRes
-    val messageRes: Int,
+    val message: String? = null,
     val cause: Throwable? = null,
     val id: Long = UUID.randomUUID().mostSignificantBits,
 ) {
@@ -23,7 +21,7 @@ data class UiMessage(
 
     init {
         logcat(LogPriority.ERROR) {
-            cause?.stackTraceToString() ?: cause?.message ?: "MessageRes: $messageRes"
+            cause?.stackTraceToString() ?: cause?.message ?: "MessageRes: $message"
         }
     }
 }
@@ -32,7 +30,7 @@ fun UiMessage(
     exception: ResourceException,
     id: Long = UUID.randomUUID().mostSignificantBits,
 ): UiMessage = UiMessage(
-    messageRes = exception.messageRes,
+    message = exception.message.orEmpty(),
     cause = exception,
     id = id,
 )

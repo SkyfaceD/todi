@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -47,7 +46,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.booleanResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
@@ -57,6 +55,7 @@ import org.skyfaced.noti.BuildConfig
 import org.skyfaced.noti.R
 import org.skyfaced.noti.settings.NotiLocale
 import org.skyfaced.noti.settings.NotiTheme
+import org.skyfaced.noti.settings.locale.strings
 import org.skyfaced.noti.ui.theme.ClearRippleTheme
 import org.skyfaced.noti.ui.util.ConfirmationData
 import org.skyfaced.noti.ui.util.ConfirmationDialog
@@ -123,13 +122,13 @@ private fun SettingsScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         val (themeSummary, themeIcon) = when (state.theme) {
-            NotiTheme.System -> R.string.lbl_system_theme to R.drawable.ic_theme_system
-            NotiTheme.Light -> R.string.lbl_theme_light to R.drawable.ic_theme_light
-            NotiTheme.Dark -> R.string.lbl_theme_dark to R.drawable.ic_theme_dark
+            NotiTheme.System -> strings.lbl_system_theme to R.drawable.ic_theme_system
+            NotiTheme.Light -> strings.lbl_theme_light to R.drawable.ic_theme_light
+            NotiTheme.Dark -> strings.lbl_theme_dark to R.drawable.ic_theme_dark
         }
         SettingsButton(
-            title = stringResource(R.string.lbl_theme),
-            summary = stringResource(themeSummary),
+            title = strings.lbl_theme,
+            summary = themeSummary,
             icon = painterResource(themeIcon),
             onClick = { themeDialog.value = true }
         )
@@ -140,8 +139,8 @@ private fun SettingsScreen(
             exit = fadeOut() + scaleOut()
         ) {
             SettingsSwitcher(
-                title = stringResource(R.string.lbl_amoled_support),
-                subtitle = stringResource(R.string.lbl_amoled_support_summary),
+                title = strings.lbl_amoled_support,
+                subtitle = strings.lbl_amoled_support_summary,
                 icon = painterResource(R.drawable.ic_amoled),
                 checked = state.amoled,
                 onClick = { onAmoledChange(!state.amoled) },
@@ -151,8 +150,8 @@ private fun SettingsScreen(
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             SettingsSwitcher(
-                title = stringResource(R.string.lbl_dynamic_theme),
-                subtitle = stringResource(R.string.lbl_dynamic_theme_summary),
+                title = strings.lbl_dynamic_theme,
+                subtitle = strings.lbl_dynamic_theme_summary,
                 icon = painterResource(R.drawable.ic_palette),
                 checked = state.dynamicColor,
                 onClick = { onDynamicColorChange(!state.dynamicColor) }
@@ -160,21 +159,21 @@ private fun SettingsScreen(
         }
 
         val languageSummary = when (state.locale) {
-            NotiLocale.English -> R.string.lbl_language_english
-            NotiLocale.Russian -> R.string.lbl_language_russian
+            NotiLocale.English -> strings.lbl_language_english
+            NotiLocale.Russian -> strings.lbl_language_russian
         }
         SettingsButton(
-            title = stringResource(R.string.lbl_language),
-            summary = stringResource(languageSummary),
+            title = strings.lbl_language,
+            summary = languageSummary,
             icon = painterResource(R.drawable.ic_language),
             onClick = { languageDialog.value = true },
         )
 
-        val (viewTypeSummary, viewIcon) = if (state.gridCells > 1) R.string.lbl_view_grid to R.drawable.ic_view_grid
-        else R.string.lbl_view_linear to R.drawable.ic_view_linear
+        val (viewTypeSummary, viewIcon) = if (state.gridCells > 1) strings.lbl_view_grid to R.drawable.ic_view_grid
+        else strings.lbl_view_linear to R.drawable.ic_view_linear
         SettingsButton(
-            title = stringResource(R.string.lbl_view_type),
-            summary = stringResource(viewTypeSummary),
+            title = strings.lbl_view_type,
+            summary = viewTypeSummary,
             icon = painterResource(viewIcon),
             onClick = { viewDialog.value = true }
         )
@@ -185,7 +184,7 @@ private fun SettingsScreen(
             exit = fadeOut() + scaleOut()
         ) {
             SettingsSlider(
-                title = stringResource(R.string.lbl_column_number),
+                title = strings.lbl_column_number,
                 summary = state.gridCells.toString(),
                 icon = painterResource(R.drawable.ic_column),
                 value = state.gridCells.toFloat(),
@@ -197,7 +196,7 @@ private fun SettingsScreen(
         }
 
         SettingsButton(
-            title = stringResource(R.string.lbl_about_app),
+            title = strings.lbl_about_app,
             summary = null,
             icon = painterResource(R.drawable.ic_info),
             onClick = { aboutDialog.value = true },
@@ -350,11 +349,11 @@ private fun Dialogs(
 ) {
     if (themeDialog.value) {
         ConfirmationDialog(
-            title = stringResource(R.string.lbl_select_theme),
+            title = strings.lbl_select_theme,
             items = listOf(
-                ConfirmationData(stringResource(R.string.lbl_system_theme)),
-                ConfirmationData(stringResource(R.string.lbl_theme_light)),
-                ConfirmationData(stringResource(R.string.lbl_theme_dark)),
+                ConfirmationData(strings.lbl_system_theme),
+                ConfirmationData(strings.lbl_theme_light),
+                ConfirmationData(strings.lbl_theme_dark),
             ),
             defaultSelectedPosition = state.theme.ordinal,
             onDismissRequest = { themeDialog.value = false },
@@ -367,11 +366,11 @@ private fun Dialogs(
 
     if (languageDialog.value) {
         ConfirmationDialog(
-            title = stringResource(R.string.lbl_select_language),
+            title = strings.lbl_select_language,
             items = listOf(
                 //@formatter:off
-                ConfirmationData(stringResource(R.string.lbl_language_english_native),stringResource(R.string.lbl_language_english)),
-                ConfirmationData(stringResource(R.string.lbl_language_russian_native),stringResource(R.string.lbl_language_russian))
+                ConfirmationData(strings.lbl_language_english_native, strings.lbl_language_english),
+                ConfirmationData(strings.lbl_language_russian_native, strings.lbl_language_russian)
                 //@formatter:on
             ),
             defaultSelectedPosition = state.locale.ordinal,
@@ -385,10 +384,10 @@ private fun Dialogs(
 
     if (viewDialog.value) {
         ConfirmationDialog(
-            title = stringResource(R.string.lbl_view_select_list_type),
+            title = strings.lbl_view_select_list_type,
             items = listOf(
-                ConfirmationData(stringResource(R.string.lbl_view_linear)),
-                ConfirmationData(stringResource(R.string.lbl_view_grid))
+                ConfirmationData(strings.lbl_view_linear),
+                ConfirmationData(strings.lbl_view_grid)
             ),
             defaultSelectedPosition = if (state.gridCells > 1) 1 else 0,
             onDismissRequest = { viewDialog.value = false },
@@ -402,16 +401,16 @@ private fun Dialogs(
     if (aboutDialog.value) {
         //@formatter:off
         val items = listOf(
-            ExternalLinkData(R.drawable.ic_google_play, R.string.cd_google_play, "https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=web_share"),
-            ExternalLinkData(R.drawable.ic_huawei, R.string.cd_huawei, "https://appgallery.huawei.com/app/C106876647"),
-            ExternalLinkData(R.drawable.ic_amazon, R.string.cd_amazon, "https://www.amazon.com/dp/B0B9NZ9X1G/ref=sr_1_2?crid=E70Z7LWY9ULN&keywords=noti+app&qid=1661438584&sprefix=noti+ap%2Caps%2C252&sr=8-2"),
-            ExternalLinkData(R.drawable.ic_github, R.string.cd_github, "https://github.com/SkyfaceD/noti"),
+            ExternalLinkData(R.drawable.ic_google_play, strings.cd_google_play, "https://play.google.com/store/apps/details?id=org.skyfaced.noti&pcampaignid=web_share"),
+            ExternalLinkData(R.drawable.ic_huawei, strings.cd_huawei, "https://appgallery.huawei.com/app/C106876647"),
+            ExternalLinkData(R.drawable.ic_amazon, strings.cd_amazon, "https://www.amazon.com/dp/B0B9NZ9X1G/ref=sr_1_2?crid=E70Z7LWY9ULN&keywords=noti+app&qid=1661438584&sprefix=noti+ap%2Caps%2C252&sr=8-2"),
+            ExternalLinkData(R.drawable.ic_github, strings.cd_github, "https://github.com/SkyfaceD/noti"),
         )
         //@formatter:on
 
         AlertDialog(
             onDismissRequest = { aboutDialog.value = false },
-            title = { Text(stringResource(R.string.lbl_about_app)) },
+            title = { Text(strings.lbl_about_app) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
@@ -420,8 +419,8 @@ private fun Dialogs(
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(Modifier.height(8.dp))
-                    Text(stringResource(R.string.placeholder_app_version, BuildConfig.VERSION_NAME))
-                    Text(stringResource(R.string.lbl_external_links))
+                    Text(strings.placeholder_app_version(BuildConfig.VERSION_NAME))
+                    Text(strings.lbl_external_links)
                     LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
@@ -433,7 +432,7 @@ private fun Dialogs(
                             ) {
                                 Icon(
                                     painterResource(item.icon),
-                                    stringResource(item.contentDescription)
+                                    item.contentDescription
                                 )
                             }
 
@@ -448,7 +447,7 @@ private fun Dialogs(
             },
             confirmButton = {
                 TextButton(onClick = { aboutDialog.value = false }) {
-                    Text(stringResource(R.string.lbl_ok))
+                    Text(strings.lbl_ok)
                 }
             }
         )
@@ -458,7 +457,6 @@ private fun Dialogs(
 data class ExternalLinkData(
     @DrawableRes
     val icon: Int,
-    @StringRes
-    val contentDescription: Int,
+    val contentDescription: String,
     val link: String,
 )
